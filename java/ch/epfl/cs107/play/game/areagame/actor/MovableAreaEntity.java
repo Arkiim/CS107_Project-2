@@ -3,6 +3,8 @@ package ch.epfl.cs107.play.game.areagame.actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
+import ch.epfl.cs107.play.window.Button;
+import ch.epfl.cs107.play.window.Keyboard;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,58 +31,82 @@ public abstract class MovableAreaEntity extends AreaEntity {
     private Vector targetPosition;
     private Vector originPosition;
 
+    private static boolean isPause;
+
     /**
      * Default MovableAreaEntity constructor
+     *
      * @param area (Area): Owner area. Not null
      * @param position (Coordinate): Initial position of the entity. Not null
      * @param orientation (Orientation): Initial orientation of the entity. Not null
      */
     public MovableAreaEntity(Area area, Orientation orientation, DiscreteCoordinates position) {
         super(area, orientation, position);
+        isPause = false;
         resetMotion();
     }
 
     /**
+     * Getter for the pause status
+     *
+     * @return true if the game is in pause
+     */
+    protected static boolean getIsPause() {
+        return isPause;
+    }
+
+    /**
+     * Toggler for the pause if were True now is false and the other way around
+     */
+   /* protected void toggleIsPause() {
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        Button esc = keyboard.get(Keyboard.ESC);
+
+        if (esc.isPressed()) {
+            if (!isPause) { isPause = true; }
+
+            //else { isPause = true; }
+        }
+    }*/
+
+
+    /**
      * Initialize or reset (if some) the current motion information
      */
-    protected void resetMotion(){
+    protected void resetMotion() {
         this.displacementOccurs = false;
         this.framesForCurrentMove = 0;
         this.remainingFramesForCurrentMove = 0;
     }
 
     /**
-     * Final move method
-     * If no displacement occurs or if the displacement just ends now,
-     * start movement of one Cell in the current Orientation direction
-     * Note the movement is possible only if this MovableAreaEntity can:
-     * - leave the cells this motion implies to leave
-     * - enter the cells this motion implies to enter
+     * Final move method If no displacement occurs or if the displacement just ends now, start movement of one Cell in the current
+     * Orientation direction Note the movement is possible only if this MovableAreaEntity can: - leave the cells this motion implies to
+     * leave - enter the cells this motion implies to enter
+     *
      * @param frameForMove (int): the frame. This value will be cropped to 1 if smaller
      * @return (boolean): indicate if the move is initiated
      */
-    protected final boolean move(int frameForMove){
+    protected final boolean move(int frameForMove) {
         return move(frameForMove, 0);
     }
 
     /**
-     * Final move method
-     * If no displacement occurs or if the displacement just ends now,
-     * start movement of one Cell in the current Orientation direction
-     * Note the movement is possible only if this MovableAreaEntity can:
-     * - leave the cells this motion implies to leave
-     * - enter the cells this motion implies to enter
+     * Final move method If no displacement occurs or if the displacement just ends now, start movement of one Cell in the current
+     * Orientation direction Note the movement is possible only if this MovableAreaEntity can: - leave the cells this motion implies to
+     * leave - enter the cells this motion implies to enter
+     *
      * @param frameForMove (int): the frame. This value will be cropped to 1 if smaller
      * @param startingFrame (int): start the movement directly from this frame
      * @return (boolean): indicate if the move is initiated
      */
-    protected final boolean move(int frameForMove, int startingFrame){
-        if(!displacementOccurs || isTargetReached() ) {
+    protected final boolean move(int frameForMove, int startingFrame) {
+        if (!displacementOccurs || isTargetReached()) {
 
             List<DiscreteCoordinates> leavingCells = getLeftCells();
             List<DiscreteCoordinates> enteringCells = getEnteringCells();
 
-            if(getOwnerArea().enterAreaCells(this, enteringCells) && getOwnerArea().leaveAreaCells(this, leavingCells)){
+            if (getOwnerArea().enterAreaCells(this, enteringCells) && getOwnerArea().leaveAreaCells(this, leavingCells)) {
 
                 leftCells = leavingCells;
                 enteredCells = enteringCells;
@@ -102,17 +128,15 @@ public abstract class MovableAreaEntity extends AreaEntity {
     }
 
     /**
-     * Final abortCurrentMove method
-     * If a displacement occurs and if the displacement is not end,
-     * abort the current move, returning to the previous cell
-     * Note the abort is possible only if this MovableAreaEntity can:
-     * - return to the cells it leaved
-     * - leave the cells it entered
+     * Final abortCurrentMove method If a displacement occurs and if the displacement is not end, abort the current move, returning to the
+     * previous cell Note the abort is possible only if this MovableAreaEntity can: - return to the cells it leaved - leave the cells it
+     * entered
+     *
      * @return (boolean): indicate if the abort is initiated
      */
-    protected final boolean abortCurrentMove(){
-        if(displacementOccurs && !isTargetReached() && leftCells != null && enteredCells != null) {
-            if(getOwnerArea().enterAreaCells(this, leftCells) && getOwnerArea().leaveAreaCells(this, enteredCells)){
+    protected final boolean abortCurrentMove() {
+        if (displacementOccurs && !isTargetReached() && leftCells != null && enteredCells != null) {
+            if (getOwnerArea().enterAreaCells(this, leftCells) && getOwnerArea().leaveAreaCells(this, enteredCells)) {
 
                 remainingFramesForCurrentMove = framesForCurrentMove - remainingFramesForCurrentMove;
 
@@ -131,23 +155,23 @@ public abstract class MovableAreaEntity extends AreaEntity {
     }
 
     /**
-     * Compute the current cells after the move
-     * by default we jump each current cell by one cell in the orientation vector
-     * @return (List<DiscreteCoordinates>): the cells after the move
+     * Compute the current cells after the move by default we jump each current cell by one cell in the orientation vector
+     *
+     * @return (List < DiscreteCoordinates >): the cells after the move
      */
     protected List<DiscreteCoordinates> getNextCurrentCells() {
         List<DiscreteCoordinates> nextCells = new ArrayList<>();
-        for(DiscreteCoordinates coord : getCurrentCells()) {
+        for (DiscreteCoordinates coord : getCurrentCells()) {
             nextCells.add(coord.jump(getOrientation().toVector()));
         }
         return nextCells;
     }
 
     /** @return (List of DiscreteCoordinates): the cells a movement will implies to leave. May be empty but not null */
-    private List<DiscreteCoordinates> getLeftCells(){
+    private List<DiscreteCoordinates> getLeftCells() {
         Set<DiscreteCoordinates> leavingCells = new HashSet<>(getCurrentCells());
         List<DiscreteCoordinates> nextCells = new ArrayList<>();
-        for(DiscreteCoordinates coord : getCurrentCells()) {
+        for (DiscreteCoordinates coord : getCurrentCells()) {
             nextCells.add(coord.jump(getOrientation().toVector()));
         }
 
@@ -156,8 +180,8 @@ public abstract class MovableAreaEntity extends AreaEntity {
         return new ArrayList<>(leavingCells);
     }
 
-    /** @return (List of DiscreteCoordinates): the cells a movement will implies to enter. May be empty but not null*/
-    private List<DiscreteCoordinates> getEnteringCells(){
+    /** @return (List of DiscreteCoordinates): the cells a movement will implies to enter. May be empty but not null */
+    private List<DiscreteCoordinates> getEnteringCells() {
         Set<DiscreteCoordinates> enteringCells = new HashSet<>(getNextCurrentCells());
 
         enteringCells.removeAll(getCurrentCells());
@@ -177,32 +201,35 @@ public abstract class MovableAreaEntity extends AreaEntity {
 
     /**
      * Indicate if a displacement is occurring
+     *
      * @return (boolean)
      */
-    protected boolean isDisplacementOccurs(){
+    protected boolean isDisplacementOccurs() {
         return displacementOccurs;
     }
 
-    /**@return (boolean): true when the target cell is just reaching now*/
-    protected boolean isTargetReached(){
+    /** @return (boolean): true when the target cell is just reaching now */
+    protected boolean isTargetReached() {
         return remainingFramesForCurrentMove == 0;
     }
 
     /**
      * Increase the position of a certain amount of frame
-     * @param frame
+     *
+     * @param frame int
      */
     private void increasePositionOf(int frame) {
-        setCurrentPosition(getPosition().add(getOrientation().toVector().mul(frame / (float)framesForCurrentMove)));
+        setCurrentPosition(getPosition().add(getOrientation().toVector().mul(frame / (float) framesForCurrentMove)));
     }
 
     /// MovableAreaEntity extends AreaEntity
     @Override
     protected boolean orientate(Orientation orientation) {
         // Allow reorientation only if no displacement is occurring or if abort current move (opposite orientation)
-        if(getOrientation().opposite().equals(orientation)) {
-            if(abortCurrentMove())
+        if (getOrientation().opposite().equals(orientation)) {
+            if (abortCurrentMove()) {
                 return super.orientate(orientation);
+            }
         }
         return !displacementOccurs && super.orientate(orientation);
     }
@@ -212,15 +239,27 @@ public abstract class MovableAreaEntity extends AreaEntity {
 
     @Override
     public void update(float deltaTime) {
-        if (displacementOccurs) {
-            if (!isTargetReached()) {
-                increasePositionOf(1);
-            } else {
-                setCurrentPosition(targetPosition);
-                resetMotion();
+        Keyboard keyboard = getOwnerArea().getKeyboard();
+        Button esc = keyboard.get(Keyboard.ESC);
+
+
+        if (!isPause) {
+            if (esc.isPressed()) { isPause = true; }
+
+            if (displacementOccurs) {
+                if (!isTargetReached()) {
+                    increasePositionOf(1);
+                } else {
+                    setCurrentPosition(targetPosition);
+                    resetMotion();
+                }
             }
-        }
-        remainingFramesForCurrentMove = Math.max(remainingFramesForCurrentMove - 1, 0);
+            remainingFramesForCurrentMove = Math.max(remainingFramesForCurrentMove - 1, 0);
+
+        } else if (esc.isPressed() && !esc.isLastPressed()) { isPause = false; }
+
+      // System.out.println(getIsPause() + " " + esc.isPressed());
+
     }
 
     /// Implements Positionable
@@ -229,4 +268,5 @@ public abstract class MovableAreaEntity extends AreaEntity {
     public Vector getVelocity() {
         return getOrientation().toVector().mul(framesForCurrentMove);
     }
+
 }

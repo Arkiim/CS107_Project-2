@@ -4,13 +4,25 @@ package ch.epfl.cs107.play.window;
  * Represents the keyboard.
  */
 public interface Keyboard {
+
     int TAB = 9;
     int ENTER = 10;
+    int ESC = 27;
     int SPACE = 32;
     int UP = 38;
     int DOWN = 40;
     int LEFT = 37;
     int RIGHT = 39;
+    int ZERO = 48;
+    int ONE = 49;
+    int TWO = 50;
+    int THREE = 51;
+    int FOUR = 52;
+    int FIVE = 53;
+    int SIX = 54;
+    int SEVEN = 55;
+    int EIGHT = 56;
+    int NINE = 57;
     int A = 65;
     int B = 66;
     int C = 67;
@@ -40,6 +52,7 @@ public interface Keyboard {
 
     /**
      * Getter for the button corresponding to the given code
+     *
      * @param code (int): the given code
      * @return (Button): state of the button for the given code
      */
