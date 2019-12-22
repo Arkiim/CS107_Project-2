@@ -1,4 +1,5 @@
-<h1> Java : Zelda/Pokemon like grid-game ( EPFL - BA1 IC ) </h1>
+<h1> EPFL - Computer Science BA1 | Java Project n°2 </h1>
+<h2> Zelda/Pokemon like grid-game </h2>
 	
 CONTROLS :
 
