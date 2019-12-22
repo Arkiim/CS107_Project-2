@@ -1,3 +1,5 @@
+<h1> Java : Zelda/Pokemon like grid-game ( EPFL - BA1 IC ) </h1>
+	
 CONTROLS :
 
 	Play : 
@@ -7,7 +9,7 @@ CONTROLS :
 	    - E : interact from view/go to next dialog window
 	    - A/B : make choice when talking to the mayor
 	
-	Test : 
+	Test / Debug : 
 	    - L : make a LogMonster appear (in RouteChateau) at (9, 9)
 	    - S : make a FlameSkull appear (in RouteChateau) at (8,10)
 	    - B : make a Bomb appear in your field of view (in RouteChateau)
