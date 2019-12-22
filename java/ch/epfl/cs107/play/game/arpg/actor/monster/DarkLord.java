@@ -59,10 +59,10 @@ public class DarkLord extends Monster {
 
 	/**
 	 * private constructor used directly only in the class when creating a copy for teleportation so as to keep track of HP loss
-	 * @param area
-	 * @param orientation
-	 * @param position
-	 * @param currentHP
+	 * @param area Area
+	 * @param orientation Orientation
+	 * @param position DiscreteCoordinates
+	 * @param currentHP float
 	 */
 	private DarkLord(Area area, Orientation orientation, DiscreteCoordinates position, float currentHP) {
 		super(area, orientation, position, MAX_HP, currentHP, VULNERABILITIES, 0);
@@ -94,9 +94,9 @@ public class DarkLord extends Monster {
 
 	/**
 	 * public constructor used to instanciate a DarkLord outside the class
-	 * @param area
-	 * @param orientation
-	 * @param position
+	 * @param area Area
+	 * @param orientation Orientation
+	 * @param position DiscreteCoordinates
 	 */
 	public DarkLord(Area area, Orientation orientation, DiscreteCoordinates position) {
 		this(area, orientation, position, MAX_HP);
