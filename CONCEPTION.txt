@@ -1,0 +1,205 @@
+                   
+                                 CONCEPTION
+=============================================================================
+
+   Methods added to AreaEntity :
+     
+     	We made the choice to add several methods to AreaEntity
+     so as to be able to exploit the Sprite and Animation easily
+     avoiding redundant code as much as possible.
+    
+
+    2.6 Bombes
+    	Nothing abnormal for the bomb part except that we decided to create 2 interfaces that we have put in a package Damage to keep them apart from all the numerous classes in ARPG.Actor. Those 2 interfaces are DmgInteractionVisitor and DamageReceiver, both handles the damages than actor can make or receive.
+
+    	In fact it's the damageReceiver that get the amount of damage from an actor of type DmgInteractionVisitor with getDmg() and inflict them to themselves with the method receiveDmg(). Both use the interactWith in their respectiv handler to share all this information in an encapsuled way. (DamageReceiver overrides the method receiveDmg() and DmgInteractionVisitor the methode getDmg())
+
+   3.2.2 INVENTAIRES 
+   		We've decided to add along with a hashmap of InventoryItem (wich is only used the represent the quantity of an InventoryItem )
+   		a list wich is created in ARPGInventory. The hasmap (inventoHash) is only used to remove a certain amount of an item, whereas the arrayList (inventoList) is used to add an object that wasn't in the inventory before or to remove completely an item.
+
+
+   3.2.3 INVENTAIRE DE ARPGPLAYER 
+   		As was said before, the abstract notion of Inventory is represented by two things:  
+   		1. The different Inventoryitems (item in itself) it can/will store. Represented by the List part of the Inventory
+   		2. The amount of one InventoryItem, it's quantity in the inventory rather than it's presence. Represented by the hashmap part of the Inventory.
+
+   		When a new ARPGInventory is created, it's in reallity "two" kinds of inventory that are created. The methods remove and add handle each specificities of each part.
+
+   		We've also decided not to let the possibility to the player to select the arrows as currentItem  because it wouldn't make any sens if the player was able to attack monsters with an arrow but without a bow. The usage of arrow is thus completely bounded to the usage of the bow.
+ 		
+ 		It makes even more sens when we code the projectile (arrow is an actor but not the bow, in fact when we use the bow we create an object arrow, the bow stays unchanged. The usage of arrows is therefore only possible throug the usage of bow, wich is rather trivial without the projectile part.)
+
+
+       
+   3.2.4 GRAPHISMES STATIQUES
+     
+        We coded the ARPGPlayerStatus class such that each element
+     (each heart, digit...) of the GUI is itself an instance of 
+     ARPGPlayerStatus, instantiated in the ARPGPlayer class, 
+     allowing flexibility and re-usability.
+     
+   3.3 COLLECTE D'OBJETS
+       
+        We coded the abstract class CollectableAreaEntity in 
+      the package ch.epfl.cs107.play.game.areagame.actor 
+      because it is a very versatile and meaningful concept
+      even outside of an ARPG. A CollectableAreaEntity is
+      characterized by a public method collect() that
+      unregisters it. We also added the class
+      CollectableItem (in extension) extending CollectableAreaEntity,
+      (in the package ch.epfl.cs107.play.game.arpg.actor)
+      that corresponds to an ARPGItem so as to add it
+      to the inventory of an inventory of an
+      ARPGItem. CastleKey could have been replaced by such
+      an object although we preferred not doing it,
+      to be more in accordance with the outline.
+
+    3.4 Objets dépendant de signaux 
+    	Considering the CastleDoor, there one thing special about it.
+    	It's the fact that the opening of the door is made in 2 times and the the player doesn't directly switch into the castle
+    	as soon as he entered in interaction for the 1st time with the door.
+
+    	First the player must open the door (if he has the key) then he can pass through it (the doors stays open if until he does not go through it). It's more realistic, that someone doesn't directly teleport himself in a room as soon as he touched the door handle.
+
+		If we'd have had directly called the method to pass the door, we wouldn't have actually seen that the doors are open.
+		So to fix that problem we made it open in two times.
+		And in addition to that it's easier to close the gate after Want pass and all those booleans are in CastleDoor.java and not in ARPGPlayer because otherwise there would be to much "unrelated" things that he doesn't have to do in ARPGPlayer.
+
+
+
+  4.1 MONSTRES
+  
+  		Firstly, each and every monster, as well as the abstract
+  	  class Monster that they all extend, are placed in the
+  	  package ch.epfl.cs107.play.game.arpg.actor.monster
+  	  in order to guarantee a certain level of encapsulation,
+  	  using private package (default) access to the getters
+  	  and setters of the private attributes declared in 
+  	  Monster.
+  	  
+  	    We decided to use inner enums to represent the 
+  	  states of the monsters LogMonster and DarkLord as well
+  	  as of a monster we added (Zombie), to make the code clear
+  	  and understandable with the use of switch on their 
+  	  currentState (attribute).
+  	    
+  	    The DarkLord's teleportation was programmed using an attribute
+  	  DarkLord teleportedCopy so as to avoid registering errors we faced
+  	  in rare cases even though testing entrances with
+  	  the Area method canEnterAreaCells
+  	  (we first used registerActor() with a new DarkLord  
+  	  (then in stockedteleportedCopy) 
+  	  to avoid invisible walls, instead of setCurrentPosition() or enterAreaCells())
+  	  
+  	  Interface MonsterAttacker (in package Damage):
+  	  	 characterizes any dmgInteractionVisitor capable of dealing damage to a monster
+  	  default Vulnerability getAttackType() { return Vulnerability.PHYSICAL }
+  	  is a method used to know if damage should be dealt to a monster depending
+  	  on Vulnerability its Vulnerability array.
+  	  
+ 4.2 BATAILLES
+ 
+ 		4.2.1 PROJECTILES
+ 		
+ 				We created the package ch.epfl.cs107.play.game.arpg.weapon
+ 			where we put the abstract class Projectile, Arrow 
+ 			and MagicWaterProjectile for encapsulation purposes.
+ 			
+ 		4.2.3
+ 		The only thing that may be unsual is that the states are handled by booleans and not enum because in our opinion we find it easier and less error prone to work with booleans that can only take 2 values (true/false) instead of working with enum which are a totally different thing.
+
+ 		The other big add up is the "gardState" since the player is always around monsters and in constant peril, we found it more logical if he were to have always his weapon unsheathed. 
+ 		We then have introduced an "en guarde" position where his weapon is always shown on the sprite of the player when he isn't moving. (for that purposed we had to add a sprite of the player holding the staff).
+  		
+ 			
+ 
+ 
+ 5 EXTENSIONS
+ 
+ 	DIALOGS : 
+ 		We have multiple choice dialog when talking to the mayor. This result in a multiple possible outcomes (different resolutions dependings on the answer of the player. (See the readMe for more infos)
+
+ 		The dialog has forced us to create 2 interfaces, readable and reader wich both use the methode interactWith to proceed the display of an entiere conversation (multiple small parts of dialogs <=> arrays of dialogs) or simply a Sign which is only composed of 1 part.
+
+ 		The interaction and how the booleans that returns whethers a readable is currently read or if the reader reads are handled in a completely parallel way. 
+ 		This means that because the action of reading always implies 2 actors the reader cannot be reading if the readable is not being not read.
+ 		wich leads to a kind of "cyclic" use of the interactWith methods. But that cyclic way was intendend for the reasons above.
+
+ 		
+ 	CHARACTERS :
+ 		- class Mayor :
+ 		as said before a mayor was added, his sprites were found on internet (link in readme), he can move, is animated can talk and other things said before
+
+
+ 		- class Zombie :
+ 		New monster
+ 	
+ 	BOX :
+ 		- addition of the actor Box
+ 		The box also relies on a signal 
+
+ 		- addition of the class CollectableItem
+ 		
+ 	AREAS :
+ 		- RouteTemple
+ 		- Temple
+ 		- GrotteDonjon
+ 	
+ 	SIGNALS :
+ 	We added 2 extensions with signals, 1 is the orb that makes the bridge appear if you shoot on it with an arrow, thus allowing the player to proceed to the Temple where he must go to use the second item based on a signal wich is the teleporter.
+
+ 		The teleporter is handle with a lever. Once you are on the big pressure plate you can activate the lever wich will set the signal of the lever to Logic.TRUE, for a period of "deltaTime" (after 1 round of simulation the state is set back to false).
+
+ 		The teleporter allows the player to transit to the last added area wich is "GrotteDonjon". Which have the same system of teleporter.
+
+ 		An abstract class logicalObject has been used to handle the behavior of the orb the lever and the last signal. The last signal is the one that make the chest (box) spawn once the player has killed all the zombies.
+
+ 		The abstract class logical object represent an object than can have 2 states  open closed (like the lever or the boxes) or an animation (like the orb) that triggers as specific event on activation. (methode setState() getState() where state is Logic.TRUE or Logic.False() )
+ 		all those interaction are done in the interactWith methods and in the updates of the differents areas
+
+ 	GRAPHICAL ELEMENTS :
+ 		- class WaterFall
+ 		- display of damage dealt to any monster
+ 		by the player
+ 		- display of countDown for Bomb
+ 		- display of a health bar for every monster
+ 	
+ 	DETAIL : 
+ 		
+ 		Zombie :
+ 			- is a Monster with different states
+ 			(enum ZombieState) that influence its behavior
+ 			- changes appearance, heals (Grave)
+ 		
+ 		//LOGICAL OBJECT INFO HERE, ORB, BRIDGE, TELEPORTER !!!!
+ 		
+ 		Box : 
+ 			- extends LogicalObject
+ 			- has a content (CollectableAreaEntity array)
+ 			that can be released or not depending on
+ 			its Signal attribute
+ 			
+ 		CollectableItem :
+ 			(see 3.3)
+ 		
+ 		display of damage :
+ 			- methods in Monster
+ 			- damage < 9.9
+ 			- works only for positive damage ( decrease in hp)
+ 			- done because it enhances gameplay by giving more info
+ 			to the user
+ 			
+ 			
+ 			
+ 	SCENARIO ELEMENTS : (see README)
+ 			
+ 		
+ 			
+ 				
+ 			
+  	  
+  	  
+      
+      
+    

@@ -1,0 +1,170 @@
+<strings id="icmon_fr">
+
+	<string name="game_name">Icmon</string>
+
+	<string name="inspect_eclatrock">Cette pierre semble pouvoir se briser. </string>
+
+	<string name="use_eclatrock">Allez ! On utilise EclatRock !</string>
+
+	<string name="missing_object">Mais il semble manquer un objet... </string>
+
+	<string name="inspect_forcerock">Cette pierre semble pouvoir se déplacer. </string>
+
+	<string name="heal_text_1">Bonjour, bienvenu au centre Pokémon ! Nous allons soigner vos icmons, veuillez patientez un instant</string>
+
+	<string name="heal_text_2">Merci de votre patience, vos icmons ont retrouvé la forme ! A bientôt</string>
+
+	<string name="you_get">Vous avez obtenu : </string>
+
+	<string name="dad_recommendation">Papa ne voudrait pas que j'utilise ça ici...</string>
+
+	<string name="sell_text_1">Bonjour, que puis-je faire pour vous</string>
+
+	<string name="sell_text_2">Merci et à bientôt</string>
+
+	<string name="available_money">Argent disponible : </string>
+
+	<string name="inspect_signalrock">Cette pierre semble reliée à un signal, peut-être qu'en trouvant comment l'activer on peut la passer</string>
+
+	<string name="riddle_1">Il parait que si tu as compris le sens de la vie, alors tu pourras passer</string>
+
+	<string name="riddle_2">On dit qu'il faut savoir ce que l'on cherche pour pouvoir passer...le sais-tu ? Parce que moi pas vraiment...</string>
+
+	<string name="mew_dialog">Mew...mew, mew mew !</string>
+
+	<string name="closed_door">Cette porte est fermée</string>
+
+	<string name="closed_door_joke">Sans blague les gens ferment leur porte...</string>
+
+	<string name="house_of_timmy">Maison de Timmy</string>
+
+	<string name="gym">Arène</string>
+
+	<string name="shop">Shop</string>
+
+	<string name="center">Centre</string>
+
+	<string name="petalburg">Clementi-Ville</string>
+
+	<string name="dialog_1">Salut toi ! </string>
+
+	<string name="dialog_2">Bouge toi de là !</string>
+
+	<string name="tv_for_mum">Cette emission plaîrait à maman ... ... ...</string>
+
+	<string name="money_unit">$</string>
+
+	<string name="wants_fight"> veut se battre !</string>
+
+	<string name="use"> lance </string>
+
+	<string name="go"> à l'attaque !</string>
+
+	<string name="lost"> Vous avez perdu !</string>
+
+	<string name="att">L'attaque</string>
+
+
+	<string name="def">La défense</string>
+
+	<string name="att_sp">L'attaque spéciale</string>
+
+	<string name="def_sp">La défense spéciale</string>
+
+	<string name="spe">La vitesse</string>
+
+	<string name="of"> de </string>
+	
+	<string name="enormous_decrease"> diminue énormément ! </string>
+	
+	<string name="big_decrease"> diminue beaucoup! </string>
+	
+	<string name="decrease"> diminue. </string>
+	
+	<string name="not_decrease"> ne diminuera plus. </string>
+	
+	<string name="enormous_increase"> augmente énormément ! </string>
+	
+	<string name="big_increase"> augmente beaucoup ! </string>
+	
+	<string name="increase"> augmente. </string>
+	
+	<string name="not_increase"> n'augmentera plus. </string>
+	
+	<string name="weired_change"> change bizarrement... </string>
+	
+	<string name="loose_hp"> perd des PV ! </string>
+	
+	<string name="regain_hp"> recupère ses PV ! </string>
+	
+	<string name="fail"> Mais cela échoue ! </string>
+	
+	<string name="critical">Coup critique ! </string>
+	
+	<string name="not_affected">Mais cela n'affecte pas </string>
+	
+	<string name=".">. </string>
+	
+	<string name="not_effective">Mais ce n'est pas très efficace ! </string>
+	
+	<string name="very_effective">C'est super efficace ! </string>
+	
+	<string name="is_ko"> est K.O ! </string>
+	
+	<string name="win"> gagne </string>
+	
+	<string name="xp"> EXP </string>
+	
+	<string name="level_up"> monte au niveau </string>
+	
+	<string name = "mayor_halt">
+		Adventurer !
+	</string>
+
+	<string name="mayor_welcome"> 
+		<!-- Mayor's Dialogue -->
+		You must help us ! A great Evil has been plaguing this Town ! For you see, it is now only the mere shadow 
+		of what it once was. The DarkLord and his army of zombies 
+		flameSkulls and logMonsters, have been tormenting us for now... 
+	</string>
+
+	<string name = "mayor_welcome1">
+		almost a decade ! You have to save us and defeat them ! You are the only one who can do it ! 
+	</string>
+
+	<string name = "mayor_welcome2">
+
+		Go search for the hidden Temple in the far East, there you will find a magic path that will lead you towards 
+		where the most of the DarkLord's army is kept ... Once you have defetead them you should be able 
+		to acquire
+	</string>
+
+	<string name = "mayor_welcome3">
+		the allmighty Staff of light and water that will help defeat the Tyran, he can only be weakened by magic !
+		You'll find some dangerous monsters on your way, so go see at the huntsman's house in the Farm just above here. 
+	</string>
+
+	<string name="mayor_welcome4">
+		He won't mind if you borrow him his equipement to defend our village.
+	</string>
+
+	<string name="mayor_choice">
+		A. Reassure yourself old man, for I will not rest until I have slayed that fiend !                                              B. No I have better things to do, this is not my problem, goodbye...
+	</string>
+
+	<string name="mayor_answer1">
+		Thank you adventurer, here are 400 Zeldollars, as a reward, and to help you in your quest. 
+		So long and may the Spirits be with you !
+	</string>
+
+	<string name="mayor_answer2">
+		No ...  Why ? ... Our last Hope... We are doomed... the DarkLord has won... I already feel the plague gaining me ... 
+		This is your fault ... 
+	</string>
+
+	<string name="huntsman's_house">House of Herman the huntsman</string>
+
+	<string name = "hint"> Through the orb, the arrow will show you the way to the Temple... </string>
+
+
+</strings>
