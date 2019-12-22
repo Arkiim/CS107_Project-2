@@ -8,7 +8,7 @@ import ch.epfl.cs107.play.io.ResourceFileSystem;
 import ch.epfl.cs107.play.io.XMLTexts;
 import ch.epfl.cs107.play.window.Window;
 import ch.epfl.cs107.play.window.swing.SwingWindow;
-//Now i know how to use git
+
 /**
  * Main entry point.
  */
