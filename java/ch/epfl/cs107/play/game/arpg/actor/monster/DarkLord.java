@@ -370,14 +370,14 @@ public class DarkLord extends Monster {
 	public Vulnerability getAttackType() {
 		return ATTACK_TYPE;
 	}
-
+/* test*/
 	/** private enum used for DarkLord states*/
 	private enum DarkLordState {
 		IDLE,
 		ATTACKING,
 		SUMMONING,
 		CASTING_TELEPORTATION,
-		TELEPORTING;
+		TELEPORTING
 
 	}
 
