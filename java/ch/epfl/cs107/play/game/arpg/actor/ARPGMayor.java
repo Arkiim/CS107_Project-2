@@ -76,7 +76,6 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		isTalking = false;
 		isFinished = false;
 		askState = false;
-		//choice = 0;
 		isChoosed = false;
 		currentPath = 0;
 		nbCellsReached = 0;

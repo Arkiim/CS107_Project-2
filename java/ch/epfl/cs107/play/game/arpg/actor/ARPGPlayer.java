@@ -63,12 +63,10 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private Animation[] playerAnimationsSword;
 
     /** Order for the sprites of Bow, Staff_Animation and Sword */
-    private final static Orientation[] orderBSAS =
-            new Orientation[]{Orientation.DOWN, Orientation.UP, Orientation.RIGHT, Orientation.LEFT};
+    private final static Orientation[] orderBSAS = new Orientation[]{Orientation.DOWN, Orientation.UP, Orientation.RIGHT, Orientation.LEFT};
 
     /** Order for the sprites of Staff_Gard, and Player */
-    private final static Orientation[] orderSGP =
-            new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT};
+    private final static Orientation[] orderSGP = new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT};
 
     private Animation battleAnimation;
 
@@ -96,6 +94,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     private Vulnerability currentAttackType;
     private float currentDmg;
+
+    public static boolean reset;
 
     /**
      * Constructor of ARPGPlayer, initialize hp, sprites, animations, currentItem and the handler (of type ARPGHandler)
@@ -147,13 +147,12 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         currentItem = 0;
         inventory.add(ARPGItem.SWORD, 1);
 
-        battleAnimation =
-                RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, chooseBattleSprites(), false)[getOrientation().ordinal()];
+        battleAnimation = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, chooseBattleSprites(), false)[getOrientation().ordinal()];
 
         gearStatus = new ARPGPlayerStatusGUI("zelda/gearDisplay", new RegionOfInterest(0, 0, 32, 32), 1.5f, true, 0, -1.75f);
         currentItemStatus =
-                new ARPGPlayerStatusGUI(getCurrentItem().getSpriteName(), new RegionOfInterest(0, 0, ICON_SIZE, ICON_SIZE),
-                                        ICON_SCALE, true, ICON_DELTA_X, ICON_DELTA_Y);
+                new ARPGPlayerStatusGUI(getCurrentItem().getSpriteName(), new RegionOfInterest(0, 0, ICON_SIZE, ICON_SIZE), ICON_SCALE,
+                                        true, ICON_DELTA_X, ICON_DELTA_Y);
 
         hearts = new ARPGPlayerStatusGUI[MAX_HP];
         createHearts();
@@ -166,15 +165,15 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         dontCutGrass = false;
         isJustCreated = true;
         isReading = false;
-
+        reset = false;
     }
 
 
     @Override
     public void update(float deltaTime) {
+        Keyboard keyboard = getOwnerArea().getKeyboard();
 
         if (!isReading && !isDead()) {
-            Keyboard keyboard = getOwnerArea().getKeyboard();
 
             for (int i = 0 ; i < MOVEMENT.length ; ++i) {
 
@@ -204,8 +203,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             //on Space => use the Item and animate the usage or set the player to idle state
             if (keyboard.get(Keyboard.SPACE).isPressed()) {
                 isJustCreated = false; //When player spawns he have his sword still sheathed
-                battleAnimation = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, chooseBattleSprites(),
-                                                             false)[getOrientation().ordinal()];
+                battleAnimation =
+                        RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, chooseBattleSprites(), false)[getOrientation().ordinal()];
                 useItem();
 
             } else {
@@ -260,9 +259,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 inventory.add(ARPGItem.BOMB, 10);
 
             }
-
         }
-
+        if (keyboard.get(Keyboard.R).isPressed() && !isReading) { reset = true; }
+     //   System.out.println(reset);
         super.update(deltaTime);
     }
 
@@ -294,8 +293,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     }
 
     /**
-     * Setter used in ARPGInventory to check and handle the limited cases and possible issues/bug that could happen when removing
-     * items, if it's the item equipped or not etc... and modify currentItem when those possible issues happens
+     * Setter used in ARPGInventory to check and handle the limited cases and possible issues/bug that could happen when removing items, if
+     * it's the item equipped or not etc... and modify currentItem when those possible issues happens
      */
     protected static void setCurrentItem(char c) {
         if (c == '-') {
@@ -318,9 +317,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     }
 
     /**
-     * Determines what to do (what item to use) based on what the currentItem is Can only use one item at a time because, player
-     * can access only one array index at a time (here array of ARPGInventory) And Since the usage of the items is based on the
-     * actual current Item, the player won't be able to use / keep using an item if he hasn't equipped it
+     * Determines what to do (what item to use) based on what the currentItem is Can only use one item at a time because, player can access
+     * only one array index at a time (here array of ARPGInventory) And Since the usage of the items is based on the actual current Item,
+     * the player won't be able to use / keep using an item if he hasn't equipped it
      */
     private void useItem() {
 
@@ -422,8 +421,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     }
 
     /**
-     * Getter used in ARPGInventory to check and handle the limited cases and possible issues/bug that could happen when removing
-     * items, if it's the item equipped or not etc...
+     * Getter used in ARPGInventory to check and handle the limited cases and possible issues/bug that could happen when removing items, if
+     * it's the item equipped or not etc...
      *
      * @return currentItem (int)
      */
@@ -463,8 +462,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     }
 
     /**
-     * If the player is moving, update the animation to keep the right animation at all times. And if he isn't reset the animation
-     * so that he don't have any animation while standing still.
+     * If the player is moving, update the animation to keep the right animation at all times. And if he isn't reset the animation so that
+     * he don't have any animation while standing still.
      *
      * @param deltaTime (float)
      */
@@ -498,8 +497,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         dontCutGrass = !(space.isDown() && (getCurrentItem() == ARPGItem.SWORD));
 
-        return (isIdle() && keyboard.get(Keyboard.E).isPressed()) || (state == State.SWORD && keyboard.get(
-                Keyboard.SPACE).isPressed());
+        return (isIdle() && keyboard.get(Keyboard.E).isPressed()) || (state == State.SWORD && keyboard.get(Keyboard.SPACE).isPressed());
 
     }
 
@@ -630,17 +628,16 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
 
     /**
-     * COnception because there are a lot of monsters, Player should always be "en garde", Thus, he should always be drawn with a
-     * weapon "unsheathed". He has the first frame of animation not update if he's not attacking, if he attacks the animation
-     * starts to be updated
+     * COnception because there are a lot of monsters, Player should always be "en garde", Thus, he should always be drawn with a weapon
+     * "unsheathed". He has the first frame of animation not update if he's not attacking, if he attacks the animation starts to be updated
      */
     @Override
     public void draw(Canvas canvas) {
 
         if (isDead()) {
             graveSprite.draw(canvas);
-            new RPGSprite("addedSprites/deathScreen", 13, 5, this,
-                          new RegionOfInterest(0,0, 1350, 300), new Vector(-6.5f, -1.5f), 0.5f, 3005 ).draw(canvas);
+            new RPGSprite("addedSprites/deathScreen", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300), new Vector(-6.5f, -1.5f), 0.5f,
+                          3005).draw(canvas);
 
         } else {
             gearStatus.draw(canvas);
@@ -684,9 +681,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private void createHearts() {
 
         for (int i = 0 ; i < MAX_HP ; ++i) {
-            hearts[i] =
-                    new ARPGPlayerStatusGUI("zelda/heartDisplay", new RegionOfInterest(32, 0, ICON_SIZE, ICON_SIZE), ICON_SCALE,
-                                            true, 1.5f + i * ICON_SCALE, ICON_DELTA_Y);
+            hearts[i] = new ARPGPlayerStatusGUI("zelda/heartDisplay", new RegionOfInterest(32, 0, ICON_SIZE, ICON_SIZE), ICON_SCALE, true,
+                                                1.5f + i * ICON_SCALE, ICON_DELTA_Y);
         }
 
     }
@@ -742,8 +738,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private ARPGPlayerStatusGUI[] createGoldCount() {
         ARPGPlayerStatusGUI[] goldCount = new ARPGPlayerStatusGUI[3];
         for (int i = 0 ; i < 3 ; ++i) {
-            goldCount[i] =
-                    new ARPGPlayerStatusGUI("zelda/digits", DIGITS_ROI[0], ICON_SCALE, false, 1.7f + i * ICON_SCALE, 0.77f);
+            goldCount[i] = new ARPGPlayerStatusGUI("zelda/digits", DIGITS_ROI[0], ICON_SCALE, false, 1.7f + i * ICON_SCALE, 0.77f);
         }
         return goldCount;
     }

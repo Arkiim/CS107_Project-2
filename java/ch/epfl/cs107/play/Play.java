@@ -1,13 +1,17 @@
 package ch.epfl.cs107.play;
 
 import ch.epfl.cs107.play.game.Game;
+import ch.epfl.cs107.play.game.Updatable;
 import ch.epfl.cs107.play.game.arpg.ARPG;
+import ch.epfl.cs107.play.game.arpg.actor.ARPGPlayer;
 import ch.epfl.cs107.play.io.DefaultFileSystem;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.io.ResourceFileSystem;
 import ch.epfl.cs107.play.io.XMLTexts;
 import ch.epfl.cs107.play.window.Window;
 import ch.epfl.cs107.play.window.swing.SwingWindow;
+
+import java.util.prefs.AbstractPreferences;
 
 /**
  * Main entry point.
@@ -29,7 +33,7 @@ public class Play {
         // Create a demo game and initialize corresponding texts
 		XMLTexts.initialize(fileSystem, "strings/icmon_fr.xml");
 
-        Game game = new ARPG();
+         Game game = new ARPG();
 
 		// Use Swing display
 		final Window window = new SwingWindow(game.getTitle(), fileSystem, 700, 700);

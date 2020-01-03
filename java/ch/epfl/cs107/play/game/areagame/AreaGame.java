@@ -1,7 +1,9 @@
 package ch.epfl.cs107.play.game.areagame;
 
 import ch.epfl.cs107.play.game.Game;
+import ch.epfl.cs107.play.game.arpg.actor.ARPGPlayer;
 import ch.epfl.cs107.play.io.FileSystem;
+import ch.epfl.cs107.play.window.Keyboard;
 import ch.epfl.cs107.play.window.Window;
 
 import java.util.*;
@@ -40,7 +42,7 @@ abstract public class AreaGame implements Game//, PauseMenu.Pausable
      */
     protected final Area setCurrentArea(String key, boolean forceBegin){
     	Area newArea = areas.get(key);
-    	
+
     	if(newArea == null) {
             System.out.println("New Area not found, keep previous one");
     	}else {
@@ -49,9 +51,9 @@ abstract public class AreaGame implements Game//, PauseMenu.Pausable
                 currentArea.suspend();
                 currentArea.purgeRegistration(); // Is useful?
             }
-            
+
             currentArea = newArea;
-            
+
             // Start/Resume the new one
             if (forceBegin || !currentArea.isStarted()) {
                 currentArea.begin(window, fileSystem);
@@ -59,7 +61,7 @@ abstract public class AreaGame implements Game//, PauseMenu.Pausable
                 currentArea.resume(window, fileSystem);
             }
     	}
-    	
+
         return currentArea;
     }
 
@@ -96,9 +98,7 @@ abstract public class AreaGame implements Game//, PauseMenu.Pausable
 
 
     @Override
-    public void update(float deltaTime) {
-    	currentArea.update(deltaTime);
-    }
+    public void update(float deltaTime) { currentArea.update(deltaTime); }
 
     @Override
     public void end() {

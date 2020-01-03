@@ -33,10 +33,6 @@ public abstract class RPG extends AreaGame {
         getCurrentArea().setViewCandidate(this.player);
     }
 
-    protected Player getPlayer(){
-        return player;
-    }
-
     /// RPG implements Playable
 
     @Override

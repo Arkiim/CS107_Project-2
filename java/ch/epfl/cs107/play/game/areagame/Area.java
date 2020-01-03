@@ -1,5 +1,6 @@
 package ch.epfl.cs107.play.game.areagame;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,7 @@ import ch.epfl.cs107.play.game.Playable;
 import ch.epfl.cs107.play.game.actor.Actor;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
+import ch.epfl.cs107.play.game.arpg.actor.ARPGPlayer;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Transform;
@@ -25,7 +27,7 @@ public abstract class Area implements Playable {
 
     // Context objects
     private Window window;
-    //private FileSystem fileSystem;
+    private FileSystem fileSystem;
     // Camera Parameter
     private Actor viewCandidate;
     private Vector viewCenter;
@@ -237,7 +239,7 @@ public abstract class Area implements Playable {
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
         this.window = window;
-        //this.fileSystem = fileSystem;
+        this.fileSystem = fileSystem;
         actors = new LinkedList<>();
         interactors = new LinkedList<>();
         registeredActors = new LinkedList<>();
@@ -261,7 +263,7 @@ public abstract class Area implements Playable {
     }
 
     @Override
-    public void update(float deltaTime) {    	
+    public void update(float deltaTime) {
     	purgeRegistration();
 
     	// Render actors
@@ -287,6 +289,11 @@ public abstract class Area implements Playable {
     		actor.bip(window);
     		actor.draw(window);
     	}
+
+     //   Keyboard keyboard = this.getKeyboard();
+        if(ARPGPlayer.reset && this.isStarted()){
+            //begin(this.window, fileSystem);
+        }
 
     }
 

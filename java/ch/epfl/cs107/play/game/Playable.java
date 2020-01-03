@@ -8,7 +8,7 @@ public interface Playable extends Updatable{
 
     /**
      * Initialises game state : display and controls
-     * Note: Need to be Override
+     * Note: Need to be Overridden
      * @param window (Window): display context. Not null
      * @param fileSystem (FileSystem): given file system. Not null
      * @return (boolean): whether the game was successfully started
@@ -16,13 +16,13 @@ public interface Playable extends Updatable{
     boolean begin(Window window, FileSystem fileSystem);
 
     /** Cleans up things, called even if initialisation failed.
-     * Note: Need to be Override
+     * Note: Need to be Overridden
      */
     void end();
 
     /**
      * Getter for game title
-     * Note: Need to be Override
+     * Note: Need to be Overridden
      * @return (String) the game title
      */
     String getTitle();
