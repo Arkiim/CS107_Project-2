@@ -95,7 +95,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private Vulnerability currentAttackType;
     private float currentDmg;
 
-    public static boolean reset;
+    private static boolean reset;
+    private static boolean reset2;
 
     /**
      * Constructor of ARPGPlayer, initialize hp, sprites, animations, currentItem and the handler (of type ARPGHandler)
@@ -165,7 +166,24 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         dontCutGrass = false;
         isJustCreated = true;
         isReading = false;
-        reset = false;
+        setReset(false);
+        setReset2(false);
+    }
+
+    public static boolean isReset() {
+        return reset;
+    }
+
+    public static void setReset(boolean reset) {
+        ARPGPlayer.reset = reset;
+    }
+
+    public static boolean isReset2() {
+        return reset2;
+    }
+
+    public static void setReset2(boolean reset2) {
+        ARPGPlayer.reset2 = reset2;
     }
 
 
@@ -260,8 +278,11 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
             }
         }
-        if (keyboard.get(Keyboard.R).isPressed() && !isReading) { reset = true; }
-     //   System.out.println(reset);
+        if (keyboard.get(Keyboard.R).isPressed() && !isReading) {
+            setReset(true);
+            setReset2(true);
+        }
+        //   System.out.println(reset);
         super.update(deltaTime);
     }
 
@@ -827,7 +848,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 }
 
             } else if (isReading) {
-
+                System.out.println(mayor.getIsDone());
                 //If player choose pathA resolve pathA and same for pathB
                 if (mayor.getCurrentPath() == 1) {
                     ARPGPlayer.this.inventory.addMoney(mayor.pathAResolution());

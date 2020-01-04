@@ -52,6 +52,11 @@ public class Village extends ARPGArea {
 	}
 
 	@Override
+	public void update(float deltaTime){
+		super.update(deltaTime);
+	}
+
+	@Override
 	public String getTitle() {
 		return "zelda/Village";
 	}

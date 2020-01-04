@@ -1,6 +1,7 @@
 package ch.epfl.cs107.play.game.actor;
 
 import ch.epfl.cs107.play.game.Updatable;
+import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.math.Positionable;
 import ch.epfl.cs107.play.window.Audio;
 
@@ -10,7 +11,6 @@ import ch.epfl.cs107.play.window.Audio;
  * Smaller components and helpers are usually owned by actors themselves.
  */
 public interface Actor extends Updatable, Graphics, Acoustics, Positionable{
-    
     @Override
     default void update(float deltaTime) {
         // By default, actors have nothing to update
@@ -20,4 +20,5 @@ public interface Actor extends Updatable, Graphics, Acoustics, Positionable{
     default void bip(Audio audio){
         // by default no sound is beeped for actor
     }
+
 }

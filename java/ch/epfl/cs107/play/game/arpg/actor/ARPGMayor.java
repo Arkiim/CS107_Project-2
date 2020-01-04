@@ -35,8 +35,8 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 
 	public static final String[][] paths = {path0, pathA, pathB} ;
 
-	public static int MAX_LENGTH = (path0.length - 1);
-	public static final int REACH = 4;
+	public int maxLength;;
+	public final int REACH = 4;
 	private int nbCellsReached;
 
 	private boolean askState;
@@ -70,8 +70,10 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		sprites = RPGSprite.extractSprites("addedSprites/mayor", 4, 1.5f, 1.80f, this, 34, 32, orientations );
 		animations = RPGSprite.createAnimations(5, sprites);
 
+		maxLength =  (path0.length - 1);
 		currentDialog = 0;
 		mayorDialog = createDialog(path0[currentDialog], owner);
+
 
 		isTalking = false;
 		isFinished = false;
@@ -79,7 +81,6 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		isChoosed = false;
 		currentPath = 0;
 		nbCellsReached = 0;
-
 	}
 
 	@Override
@@ -101,7 +102,6 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		askState = path0[currentDialog].equals("mayor_choice");
 
 		makeChoice();
-		
 		super.update(deltaTime);
 	}
 
@@ -152,7 +152,7 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 	//because if its not to true then reader has already quit the dialog
 	@Override
 	public boolean getIsDone() {
-		return isTalking && (currentDialog >= MAX_LENGTH) ;
+		return isTalking && (currentDialog >= maxLength) ;
 	}
 
 	private void movement() {
@@ -204,7 +204,7 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 	private void newPath(String[] newPath, int index) {
 		currentPath = index;
 		currentDialog = 0;
-		MAX_LENGTH = newPath.length - 1;
+		maxLength = newPath.length - 1;
 	}
 
 	/**
@@ -321,6 +321,7 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		public void interactWith(ARPGPlayer player) {
 			if(!player.getIsReading()) {
 				player.startReading(ARPGMayor.this);
+				System.out.println("mayor hasInteracted");
 			}
 		}
 	}

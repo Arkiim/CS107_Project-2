@@ -21,7 +21,6 @@ public class ARPG extends RPG{
 	private final static String areas[] = {"zelda/Village"};
 	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(17,5)};//, new DiscreteCoordinates(6,7)
 	private static int areaIndex = 0;
-	private boolean hasStarted = false;
 
 	/**
 	 * Add all the areas
@@ -43,12 +42,21 @@ public class ARPG extends RPG{
 
 	@Override
 	public void update(float deltaTime){
-		System.out.println(ARPGPlayer.reset);
-		if(ARPGPlayer.reset && hasStarted){
-			begin(getWindow(),getFileSystem());
+		if(ARPGPlayer.isReset2()){
+			System.out.println(ARPGPlayer.isReset2());
+			initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
+			ARPGPlayer.setReset2(false);
 		}
-		hasStarted = true;
+	//	initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
+
+/*		System.out.println(ARPGPlayer.isReset());
+			if(ARPGPlayer.isReset()){
+				ARPGPlayer.setReset(false);
+				initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
+			}*/
+
 		super.update(deltaTime);
+
 	}
 
 	@Override
