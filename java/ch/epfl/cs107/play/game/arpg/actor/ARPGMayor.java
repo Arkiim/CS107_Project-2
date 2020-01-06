@@ -321,7 +321,6 @@ public class ARPGMayor extends MovableAreaEntity implements Readable, Interactor
 		public void interactWith(ARPGPlayer player) {
 			if(!player.getIsReading()) {
 				player.startReading(ARPGMayor.this);
-				System.out.println("mayor hasInteracted");
 			}
 		}
 	}

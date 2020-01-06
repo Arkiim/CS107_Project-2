@@ -42,8 +42,8 @@ public abstract class Area implements Playable {
     /// pause mechanics and menu to display. May be null
     /// - start indicate if area already begins, paused indicate if we display the pause menu
     private boolean started;//, paused;
-    private boolean onceReset = false;
-    private boolean onceReset2 = false;
+    private static boolean onceReset;
+    public static boolean wantsReset;
 
     /** @return (float): camera scale factor, assume it is the same in x and y direction */
     public abstract float getCameraScaleFactor();
@@ -254,6 +254,8 @@ public abstract class Area implements Playable {
         interactablesToLeave = new HashMap<>();
         viewCenter = Vector.ZERO;
         started = true;
+        onceReset = false;
+        wantsReset = false;
         return true;
     }
 
@@ -297,12 +299,11 @@ public abstract class Area implements Playable {
             actor.bip(window);
             actor.draw(window);
         }
-        if (ARPGPlayer.isReset()) {
-            ARPGPlayer.setReset(false);
-            purgeRegistration();
+        if (wantsReset) {
+             wantsReset=false;
+            //purgeRegistration();
             onceReset = reset();
-            onceReset = true;
-            purgeRegistration();
+          //  purgeRegistration();
         }
 
         if (onceReset) {
@@ -314,6 +315,10 @@ public abstract class Area implements Playable {
 
         }
 
+    }
+
+    public static boolean isReset() {
+        return onceReset;
     }
 
     final void purgeRegistration() {
@@ -365,11 +370,11 @@ public abstract class Area implements Playable {
     }
 
     public boolean reset() {
-        boolean isResetOk = true;
-        Actor actor;
+        boolean isResetOk;
         List<Actor> tmpActors = new LinkedList<>();
 
         if (!onceReset) {
+            isResetOk = true;
             for (Actor i : actors) {
                 tmpActors.add(i);
                 isResetOk = unregisterActor(i) && isResetOk;
@@ -377,11 +382,11 @@ public abstract class Area implements Playable {
             return isResetOk;
 
         } else {
-
+            isResetOk = true;
             for (Actor i : tmpActors) {
                 isResetOk = registerActor(i) && isResetOk;
             }
-            return true;
+            return isResetOk;
         }
     }
 

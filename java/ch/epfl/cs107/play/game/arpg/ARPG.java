@@ -1,5 +1,6 @@
 package ch.epfl.cs107.play.game.arpg;
 
+import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.arpg.actor.ARPGPlayer;
 import ch.epfl.cs107.play.game.arpg.area.Chateau;
@@ -21,6 +22,7 @@ public class ARPG extends RPG{
 	private final static String areas[] = {"zelda/Village"};
 	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(17,5)};//, new DiscreteCoordinates(6,7)
 	private static int areaIndex = 0;
+	private static boolean wantsReset=false;
 
 	/**
 	 * Add all the areas
@@ -42,21 +44,21 @@ public class ARPG extends RPG{
 
 	@Override
 	public void update(float deltaTime){
-		if(ARPGPlayer.isReset2()){
-			System.out.println(ARPGPlayer.isReset2());
+		if(wantsReset){
 			initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
-			ARPGPlayer.setReset2(false);
+			wantsReset=false;
 		}
-	//	initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
-
-/*		System.out.println(ARPGPlayer.isReset());
-			if(ARPGPlayer.isReset()){
-				ARPGPlayer.setReset(false);
-				initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
-			}*/
 
 		super.update(deltaTime);
 
+	}
+
+	public static boolean isWantsReset(){
+		return wantsReset;
+	}
+
+	public static void setWantsReset(boolean b){
+		wantsReset = b;
 	}
 
 	@Override

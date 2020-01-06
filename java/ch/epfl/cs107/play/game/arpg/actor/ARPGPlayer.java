@@ -10,6 +10,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.arpg.ARPG;
 import ch.epfl.cs107.play.game.arpg.actor.monster.FlameSkull;
 import ch.epfl.cs107.play.game.arpg.actor.monster.LogMonster;
 import ch.epfl.cs107.play.game.arpg.actor.monster.Monster;
@@ -167,10 +168,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         isJustCreated = true;
         isReading = false;
         setReset(false);
-        setReset2(false);
     }
 
-    public static boolean isReset() {
+    public static boolean wantsReset() {
         return reset;
     }
 
@@ -178,13 +178,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         ARPGPlayer.reset = reset;
     }
 
-    public static boolean isReset2() {
-        return reset2;
-    }
-
-    public static void setReset2(boolean reset2) {
-        ARPGPlayer.reset2 = reset2;
-    }
+    //  public static boolean wantsReset2() { return reset2; }
 
 
     @Override
@@ -279,10 +273,10 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             }
         }
         if (keyboard.get(Keyboard.R).isPressed() && !isReading) {
-            setReset(true);
-            setReset2(true);
+            // setReset(true);
+            ARPG.setWantsReset(true);
+            Area.wantsReset = true;
         }
-        //   System.out.println(reset);
         super.update(deltaTime);
     }
 
@@ -848,7 +842,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 }
 
             } else if (isReading) {
-                System.out.println(mayor.getIsDone());
                 //If player choose pathA resolve pathA and same for pathB
                 if (mayor.getCurrentPath() == 1) {
                     ARPGPlayer.this.inventory.addMoney(mayor.pathAResolution());
