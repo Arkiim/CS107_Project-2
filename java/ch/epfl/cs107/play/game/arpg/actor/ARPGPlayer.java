@@ -89,15 +89,13 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private boolean dontCutGrass;
     private boolean isJustCreated;
     private State state;
+    private boolean debugMode;
 
     private boolean isReading;
 
 
     private Vulnerability currentAttackType;
     private float currentDmg;
-
-    private static boolean reset;
-    private static boolean reset2;
 
     /**
      * Constructor of ARPGPlayer, initialize hp, sprites, animations, currentItem and the handler (of type ARPGHandler)
@@ -167,19 +165,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         dontCutGrass = false;
         isJustCreated = true;
         isReading = false;
-        setReset(false);
+        debugMode = false;
     }
-
-    public static boolean wantsReset() {
-        return reset;
-    }
-
-    public static void setReset(boolean reset) {
-        ARPGPlayer.reset = reset;
-    }
-
-    //  public static boolean wantsReset2() { return reset2; }
-
 
     @Override
     public void update(float deltaTime) {
@@ -241,42 +228,49 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             }
 
             //for testing purposes
-            //Makes Makes monster, bomb or fire Spawn, uppon pressing respectively on S, L, B or F
-            if (keyboard.get(Keyboard.S).isPressed() && getOwnerArea().getTitle().equals("zelda/RouteChateau")) {
-                getOwnerArea().registerActor(new FlameSkull(getOwnerArea(), Orientation.UP, new DiscreteCoordinates(8, 10)));
+            if (keyboard.get(Keyboard.J).isPressed() && keyboard.get(Keyboard.O).isPressed() && keyboard.get(Keyboard.P).isPressed()) {
+               if(!debugMode) debugMode = true;
+               else debugMode = false;
             }
 
-            if (keyboard.get(Keyboard.L).isPressed() && getOwnerArea().getTitle().equals("zelda/RouteChateau")) {
-                getOwnerArea().registerActor(new LogMonster(getOwnerArea(), Orientation.UP, new DiscreteCoordinates(9, 9)));
-            }
+            if (debugMode) {
+                //Makes Makes flameskull, LogMonster, bomb, fire or Zombie Spawn, uppon pressing respectively on K, L, B or F
+                if (keyboard.get(Keyboard.K).isPressed()) {
+                    getOwnerArea().registerActor(new FlameSkull(getOwnerArea(), Orientation.UP, getFieldOfViewCells().get(0)));
+                }
 
-            if (keyboard.get(Keyboard.B).isPressed() && getOwnerArea().getTitle().equals("zelda/RouteChateau")) {
-                getOwnerArea().registerActor(new Bomb(getOwnerArea(), getFieldOfViewCells().get(0)));
-            }
+                if (keyboard.get(Keyboard.L).isPressed()) {
+                    getOwnerArea().registerActor(new LogMonster(getOwnerArea(), Orientation.UP, getFieldOfViewCells().get(0)));
+                }
 
-            if (keyboard.get(Keyboard.F).isPressed() && getOwnerArea().getTitle().equals("zelda/RouteChateau")) {
-                getOwnerArea().registerActor(new FireSpell(getOwnerArea(), getOrientation(), getFieldOfViewCells().get(0), 10));
-            }
+                if (keyboard.get(Keyboard.B).isPressed()) {
+                    getOwnerArea().registerActor(new Bomb(getOwnerArea(), getFieldOfViewCells().get(0)));
+                }
 
-            if (keyboard.get(Keyboard.Z).isPressed()) {
-                getOwnerArea().registerActor(new Zombie(getOwnerArea(), getOrientation(), getFieldOfViewCells().get(0)));
-            }
+                if (keyboard.get(Keyboard.F).isPressed()) {
+                    getOwnerArea().registerActor(new FireSpell(getOwnerArea(), getOrientation(), getFieldOfViewCells().get(0), 10));
+                }
 
-            if (keyboard.get(Keyboard.I).isPressed()) {
-                inventory.add(ARPGItem.STAFF, 1);
-                inventory.add(ARPGItem.SWORD, 1);
-                inventory.add(ARPGItem.CASTLEKEY, 1);
-                inventory.add(ARPGItem.BOW, 1);
-                inventory.add(ARPGItem.ARROW, 45);
-                inventory.add(ARPGItem.BOMB, 10);
+                if (keyboard.get(Keyboard.Z).isPressed()) {
+                    getOwnerArea().registerActor(new Zombie(getOwnerArea(), getOrientation(), getFieldOfViewCells().get(0)));
+                }
 
+                if (keyboard.get(Keyboard.I).isPressed()) {
+                    inventory.add(ARPGItem.STAFF, 1);
+                    inventory.add(ARPGItem.SWORD, 1);
+                    inventory.add(ARPGItem.CASTLEKEY, 1);
+                    inventory.add(ARPGItem.BOW, 1);
+                    inventory.add(ARPGItem.ARROW, 45);
+                    inventory.add(ARPGItem.BOMB, 10);
+
+                }
             }
         }
-        if (keyboard.get(Keyboard.R).isPressed() && !isReading) {
-            // setReset(true);
+        if (keyboard.get(Keyboard.R).isPressed() && !isReading && (isDead() || debugMode)) {
             ARPG.setWantsReset(true);
-            Area.wantsReset = true;
+            Area.setWantsReset(true);
         }
+        
         super.update(deltaTime);
     }
 
@@ -651,7 +645,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         if (isDead()) {
             graveSprite.draw(canvas);
-            new RPGSprite("addedSprites/deathScreen", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300), new Vector(-6.5f, -1.5f), 0.5f,
+            new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300), new Vector(-6.5f, -1.5f), 0.6f,
                           3005).draw(canvas);
 
         } else {

@@ -6,8 +6,6 @@ import ch.epfl.cs107.play.game.Playable;
 import ch.epfl.cs107.play.game.actor.Actor;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
-import ch.epfl.cs107.play.game.arpg.actor.ARPGMayor;
-import ch.epfl.cs107.play.game.arpg.actor.ARPGPlayer;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Transform;
@@ -272,8 +270,6 @@ public abstract class Area implements Playable {
 
     @Override
     public void update(float deltaTime) {
-
-
         purgeRegistration();
 
         // Render actors
@@ -300,10 +296,8 @@ public abstract class Area implements Playable {
             actor.draw(window);
         }
         if (wantsReset) {
-             wantsReset=false;
-            //purgeRegistration();
+            wantsReset = false;
             onceReset = reset();
-          //  purgeRegistration();
         }
 
         if (onceReset) {
@@ -311,14 +305,16 @@ public abstract class Area implements Playable {
             onceReset = false;
             reset();
             purgeRegistration();
-
-
         }
 
     }
 
     public static boolean isReset() {
         return onceReset;
+    }
+
+    public static void setWantsReset(boolean b) {
+        wantsReset = b;
     }
 
     final void purgeRegistration() {
@@ -369,24 +365,26 @@ public abstract class Area implements Playable {
         // Does nothing by default
     }
 
+    /**
+     * Reset all Areas by removing and then re-adding  every Actor
+     * @return true if the reset succeeded / false otherwise
+     */
     public boolean reset() {
-        boolean isResetOk;
+        boolean isReset = true;
         List<Actor> tmpActors = new LinkedList<>();
 
         if (!onceReset) {
-            isResetOk = true;
             for (Actor i : actors) {
                 tmpActors.add(i);
-                isResetOk = unregisterActor(i) && isResetOk;
+                isReset = unregisterActor(i) && isReset;
             }
-            return isResetOk;
+            return isReset;
 
         } else {
-            isResetOk = true;
             for (Actor i : tmpActors) {
-                isResetOk = registerActor(i) && isResetOk;
+                isReset = registerActor(i) && isReset;
             }
-            return isResetOk;
+            return isReset;
         }
     }
 

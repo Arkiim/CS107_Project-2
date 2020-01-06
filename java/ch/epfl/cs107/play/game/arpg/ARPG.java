@@ -53,10 +53,6 @@ public class ARPG extends RPG{
 
 	}
 
-	public static boolean isWantsReset(){
-		return wantsReset;
-	}
-
 	public static void setWantsReset(boolean b){
 		wantsReset = b;
 	}
