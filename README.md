@@ -11,10 +11,12 @@ CONTROLS :
 	    - A/B : make choice when talking to the mayor
 	
 	Test / Debug : 
-	    - L : make a LogMonster appear (in RouteChateau) at (9, 9)
-	    - S : make a FlameSkull appear (in RouteChateau) at (8,10)
-	    - B : make a Bomb appear in your field of view (in RouteChateau)
-	    - Z : make a Zombie appear near you (in diagonal Upright) (works everywhere)
+	 J+O+P : Enable debug Mode to use the following features :
+	    - L : make a LogMonster appear faced Up, in front of the player
+	    - K : make a FlameSkull appear faced Up, in front of the player
+	    - B : make a Bomb appear faced Up, in front of the player
+	    - F : make Fire appear faced Up, in front of the player
+	    - Z : make a Zombie appear near you,faced Up, in front of the player
 	    - I : add sword, bow, arrow, bomb, castle key to the inventory	
 	    		
 ________________________________________________________________________________________________
@@ -22,7 +24,7 @@ ________________________________________________________________________________
 PLAYER INFO :
 
     - starts with only a sword in the inventory
-    - max hp : 5.0f
+    - max hp : 6.0f
 				
 WEAPON INFO :
 
@@ -37,6 +39,11 @@ WEAPON INFO :
 	- Magic Projectile (thrown by staff) : 
 	    - attack type : MAGICAL
 	    - damage : 2.0f
+	    
+	- Bomb :
+	    - attack type : PHYSICAL
+	    - damage : 4.0f 
+	    (can hurt the player if he stays to close to it)
 			
 											   
 ________________________________________________________________________________________________
