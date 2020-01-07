@@ -88,11 +88,10 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     private boolean dontCutGrass;
     private boolean isJustCreated;
-    private State state;
     private boolean debugMode;
 
-    private boolean isReading;
-
+    private State state;
+    private State oldState;
 
     private Vulnerability currentAttackType;
     private float currentDmg;
@@ -162,9 +161,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         setGoldCount();
 
         this.state = State.IDLE;
+        this.oldState = State.IDLE;
         dontCutGrass = false;
         isJustCreated = true;
-        isReading = false;
         debugMode = false;
     }
 
@@ -172,7 +171,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     public void update(float deltaTime) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
 
-        if (!isReading && !isDead()) {
+        if (!isReading() && !isDead()) {
 
             for (int i = 0 ; i < MOVEMENT.length ; ++i) {
 
@@ -266,7 +265,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 }
             }
         }
-        if (keyboard.get(Keyboard.R).isPressed() && !isReading && (isDead() || debugMode)) {
+        if (keyboard.get(Keyboard.R).isPressed() && !isReading() && (isDead() || debugMode)) {
             ARPG.setWantsReset(true);
             Area.setWantsReset(true);
         }
@@ -506,7 +505,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         dontCutGrass = !(space.isDown() && (getCurrentItem() == ARPGItem.SWORD));
 
-        return (isIdle() && keyboard.get(Keyboard.E).isPressed()) || (state == State.SWORD && keyboard.get(Keyboard.SPACE).isPressed());
+        return ((isIdle() || isReading()) && keyboard.get(Keyboard.E).isPressed()) || (state == State.SWORD && keyboard.get(Keyboard.SPACE).isPressed());
 
     }
 
@@ -556,9 +555,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     @Override
     public void startReading(Readable readable) {
-        isReading = true;
+        oldState = state;
+        state = State.READING;
         readable.toggleIsBeingRead();
-
         /*
          * since reading always involves 2 actors, a reader and a readable
          * exemple a sign and the player, the mayor and the player etc...
@@ -575,7 +574,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     @Override
     public void finishReading(Readable readable) {
-        isReading = false;
+        state = oldState;
+        oldState = State.READING;
         readable.toggleIsBeingRead();
     }
 
@@ -584,13 +584,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      * @return true if the player isReading false otherwise
      */
     @Override
-    public boolean getIsReading() {
-        return isReading;
+    public boolean isReading() {
+        return state == state.READING;
     }
-
-    //	protected void setIsReading(boolean isReading) {
-    //		this.isReading = isReading;
-    //	}
 
     /**
      * Return the right Sprite[][] Arrays, corresponding to the item currentlyEquipped
@@ -830,12 +826,12 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         public void interactWith(ARPGMayor mayor) {
             if (!mayor.getIsDone()) {
 
-                if (mayor.getIsBeingRead() && isReading) {
+                if (mayor.getIsBeingRead() && isReading()) {
 
                     ARPGPlayer.this.toNextDialog(mayor);
                 }
 
-            } else if (isReading) {
+            } else if (isReading()) {
                 //If player choose pathA resolve pathA and same for pathB
                 if (mayor.getCurrentPath() == 1) {
                     ARPGPlayer.this.inventory.addMoney(mayor.pathAResolution());
@@ -851,7 +847,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         @Override
         public void interactWith(ARPGSign sign) {
-            if (!isReading) {
+            if (!isReading()) {
                 ARPGPlayer.this.startReading(sign);
             } else if (sign.getIsDone() && sign.getIsBeingRead()) {
                 ARPGPlayer.this.finishReading(sign);
@@ -898,6 +894,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         BOW,
         STAFF,
         DEAD,
+        READING,
+        PAUSE
     }
 
 }

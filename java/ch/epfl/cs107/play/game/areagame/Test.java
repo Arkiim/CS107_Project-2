@@ -2,43 +2,42 @@ package ch.epfl.cs107.play.game.areagame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Test {
+    Scanner scanner = new Scanner(System.in);
+    private double j;
+    private int n;
+    private double k;
 
-    List<String> test;
-    List<String> test2;
+    public Test() {
+        System.out.println("Enter : init value of J, incrementation value K and Stop condition N (int)");
+        this.j = scanner.nextDouble();
+        this.k = scanner.nextDouble();
+        this.n = scanner.nextInt();
 
-    public void add(String t){
-        test.add(t);
+        System.out.println(j + ", " + k + ", " + n);
+        f();
     }
 
-    public Test(){
-        test = new ArrayList<String>();
-        test2 = new ArrayList<String>();
-        add("1");
-        add("2");
-        System.out.println(test);
-
-      /*  System.out.println(test2.get(0));
-        test2.remove(1);
-        System.out.println(test);*/
-        for(String i : test){
-           // System.out.println(test.get(1));
-            test2.add(i);
+    private void f(){
+        double i = 0;
+        double x = 0;
+        while(i < n){
+            x += k;
+            i+= x;
+            j +=1;
+            System.out.println( x  + " <x, j> " + j + " i = " + i +" < " + n + "= n");
         }
+        System.out.println("x = " + x + " Sqrt[n] = " + Math.sqrt(n) );
 
-       System.out.println(test2);
-        test2.remove(1);
-        System.out.println(test2 +"," + test);
+        for(int w = 0; w < Math.sqrt(4*n); w++){
+            System.out.println(w + " <K, J> " + j + " TRUE K = " + Math.sqrt(4*n - j));
+        }
     }
 
-    @Override
-    public String toString(){
-        return test.get(0) +"," + test.get(1);
-    }
 
     public static void main(String[] args) {
-         Test a =  new Test();
-         //System.out.println(test1);
+        Test chibre = new Test();
     }
 }

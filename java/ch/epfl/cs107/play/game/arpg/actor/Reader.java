@@ -10,6 +10,6 @@ public interface Reader extends Interactor{
 	
 	void finishReading(Readable readable);
 	
-	boolean getIsReading();
+	boolean isReading();
 	
 }
