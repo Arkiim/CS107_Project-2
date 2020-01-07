@@ -228,9 +228,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             }
 
             //for testing purposes
-            if (keyboard.get(Keyboard.J).isPressed() && keyboard.get(Keyboard.O).isPressed() && keyboard.get(Keyboard.P).isPressed()) {
-               if(!debugMode) debugMode = true;
-               else debugMode = false;
+            if (keyboard.get(Keyboard.SHIFT).isDown() && (keyboard.get(Keyboard.J).isPressed()) && (keyboard.get(Keyboard.O).isPressed())) {
+                if (!debugMode) { debugMode = true; } else { debugMode = false; }
+                System.out.println(debugMode);
             }
 
             if (debugMode) {
@@ -270,7 +270,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             ARPG.setWantsReset(true);
             Area.setWantsReset(true);
         }
-        
+
         super.update(deltaTime);
     }
 

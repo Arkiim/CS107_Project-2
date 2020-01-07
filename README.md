@@ -11,7 +11,7 @@ CONTROLS :
 	    - A/B : make choice when talking to the mayor
 	
 	Test / Debug : 
-	 J+O+P : Enable debug Mode to use the following features :
+	 (Maintain:) SHIFT+ (Press:) O+P : Enable debug Mode to use the following features :
 	    - L : make a LogMonster appear faced Up, in front of the player
 	    - K : make a FlameSkull appear faced Up, in front of the player
 	    - B : make a Bomb appear faced Up, in front of the player

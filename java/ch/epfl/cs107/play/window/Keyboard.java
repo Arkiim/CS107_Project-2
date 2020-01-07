@@ -9,6 +9,7 @@ public interface Keyboard {
     int ENTER = 10;
     int ESC = 27;
     int SPACE = 32;
+    int SHIFT = 16;
     int UP = 38;
     int DOWN = 40;
     int LEFT = 37;
