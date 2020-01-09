@@ -4,6 +4,7 @@ import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
+import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 
 /**
@@ -13,6 +14,7 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
 
     private boolean isPassingADoor;
     private Door passedDoor;
+    private Sprite mapSprite;
 
     /**
      * Default Player constructor
@@ -24,6 +26,12 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
         super(area, orientation, coordinates);
         passedDoor = null;
         isPassingADoor = false;
+        String areaPath = "../backgrounds/" + area.getTitle();
+        mapSprite = new RPGSprite(areaPath, 16, 16, this);
+    }
+
+    protected Sprite getMapSprite(){
+        return mapSprite;
     }
 
     /**

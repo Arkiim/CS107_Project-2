@@ -137,7 +137,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         AreaEntity.setAnchor(playerAnimationsSword, BATTLE_DELTA, 0);
         AreaEntity.setAnchor(playerAnimationsStaff, BATTLE_DELTA, 0);
 
-
         this.handler = new ARPGPlayerHandler();
 
         hp = MAX_HP;
@@ -505,7 +504,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         dontCutGrass = !(space.isDown() && (getCurrentItem() == ARPGItem.SWORD));
 
-        return ((isIdle() || isReading()) && keyboard.get(Keyboard.E).isPressed()) || (state == State.SWORD && keyboard.get(Keyboard.SPACE).isPressed());
+        return ((isIdle() || isReading()) && keyboard.get(Keyboard.E).isPressed()) ||
+               (state == State.SWORD && keyboard.get(Keyboard.SPACE).isPressed());
 
     }
 
@@ -641,8 +641,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         if (isDead()) {
             graveSprite.draw(canvas);
-            new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300), new Vector(-6.5f, -1.5f), 0.6f,
-                          3005).draw(canvas);
+            new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300),
+                          new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
 
         } else {
             gearStatus.draw(canvas);
