@@ -170,7 +170,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         isJustCreated = true;
         debugMode = false;
     }
-
+//t
     @Override
     public void update(float deltaTime) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
