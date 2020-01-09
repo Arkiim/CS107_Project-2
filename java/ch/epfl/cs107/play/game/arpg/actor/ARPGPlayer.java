@@ -85,6 +85,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private ARPGPlayerStatusGUI[] hearts;
     private ARPGPlayerStatusGUI goldDisplay;
     private ARPGPlayerStatusGUI[] goldCountDisplay;
+    private ARPGPlayerStatusGUI miniMap;
 
     private boolean dontCutGrass;
     private boolean isJustCreated;
@@ -155,9 +156,13 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         hearts = new ARPGPlayerStatusGUI[MAX_HP];
         createHearts();
 
-        goldDisplay = new ARPGPlayerStatusGUI("zelda/coinsDisplay", new RegionOfInterest(0, 0, 64, 32), 4.5f, 2.25f, false, 0, 0);
+        goldDisplay = new ARPGPlayerStatusGUI("zelda/coinsDisplay", new RegionOfInterest(0, 0, 64, 32),
+                                              4.5f, 2.25f, false, 0, 0);
         goldCountDisplay = createGoldCount();
         setGoldCount();
+
+        miniMap = new ARPGPlayerStatusGUI(getMapSpriteName(), new RegionOfInterest(32, 0, 480, 480), 2.3f, true,
+                                          10.69f, - 2.3f);
 
         this.state = State.IDLE;
         this.oldState = State.IDLE;
@@ -585,7 +590,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      */
     @Override
     public boolean isReading() {
-        return state == state.READING;
+        return state == State.READING;
     }
 
     /**
@@ -638,37 +643,42 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      */
     @Override
     public void draw(Canvas canvas) {
-
-        if (isDead()) {
-            graveSprite.draw(canvas);
-            new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300),
-                          new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
-
+        if (true) {
+            miniMap.draw(canvas);
         } else {
-            gearStatus.draw(canvas);
-            currentItemStatus.draw(canvas);
 
-            for (ARPGPlayerStatusGUI heart : hearts) {
-                heart.draw(canvas);
-            }
-
-            goldDisplay.draw(canvas);
-
-            for (ARPGPlayerStatusGUI goldDigit : goldCountDisplay) {
-                goldDigit.draw(canvas);
-            }
-
-            if (isJustCreated) {
-                animation.draw(canvas);
-
-            } else if ((!isDisplacementOccurs() && !isIdle()) || (!battleAnimation.isCompleted())) {
-                battleAnimation.draw(canvas);
-
-            } else if (!isDisplacementOccurs()) {
-                chooseGardeSprites()[getOrientation().ordinal()].draw(canvas);
+            if (isDead()) {
+                graveSprite.draw(canvas);
+                new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300),
+                              new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
 
             } else {
-                animation.draw(canvas);
+                //miniMap.draw(canvas);
+                gearStatus.draw(canvas);
+                currentItemStatus.draw(canvas);
+
+                for (ARPGPlayerStatusGUI heart : hearts) {
+                    heart.draw(canvas);
+                }
+
+                goldDisplay.draw(canvas);
+
+                for (ARPGPlayerStatusGUI goldDigit : goldCountDisplay) {
+                    goldDigit.draw(canvas);
+                }
+
+                if (isJustCreated) {
+                    animation.draw(canvas);
+
+                } else if ((!isDisplacementOccurs() && !isIdle()) || (!battleAnimation.isCompleted())) {
+                    battleAnimation.draw(canvas);
+
+                } else if (!isDisplacementOccurs()) {
+                    chooseGardeSprites()[getOrientation().ordinal()].draw(canvas);
+
+                } else {
+                    animation.draw(canvas);
+                }
             }
         }
     }

@@ -6,6 +6,8 @@ import ch.epfl.cs107.play.game.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
+import ch.epfl.cs107.play.math.RegionOfInterest;
+import ch.epfl.cs107.play.math.Vector;
 
 /**
  * Player is a Specific RPG actor
@@ -14,7 +16,7 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
 
     private boolean isPassingADoor;
     private Door passedDoor;
-    private Sprite mapSprite;
+    private String mapSpriteName;
 
     /**
      * Default Player constructor
@@ -26,32 +28,32 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
         super(area, orientation, coordinates);
         passedDoor = null;
         isPassingADoor = false;
-        String areaPath = "../backgrounds/" + area.getTitle();
-        mapSprite = new RPGSprite(areaPath, 16, 16, this);
+        mapSpriteName = "../backgrounds/" + area.getTitle();
+        //mapSprite = new RPGSprite("../backgrounds/" + area.getTitle(), 16, 16, this);
     }
 
-    protected Sprite getMapSprite(){
-        return mapSprite;
+    protected String getMapSpriteName() {
+        return mapSpriteName;
     }
 
     /**
      * Leave an area by unregister this player
      */
-    public void leaveArea(){
+    public void leaveArea() {
         getOwnerArea().unregisterActor(this);
     }
 
     /**
-     *
      * @param area (Area): initial area, not null
-     * @param position (DiscreteCoordinates): initial position, not null
+     * @param position (DiscreteCoordinates) : initial position, not null
      */
-    public void enterArea(Area area, DiscreteCoordinates position){
+    public void enterArea(Area area, DiscreteCoordinates position) {
         area.registerActor(this);
         area.setViewCandidate(this);
 
         setOwnerArea(area);
         setCurrentPosition(position.toVector());
+        updateMap(area);
         resetDoorStates();
         resetMotion();
     }
@@ -59,9 +61,18 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
     /**
      * Reset the door state
      */
-    private void resetDoorStates(){
+    private void resetDoorStates() {
         passedDoor = null;
         isPassingADoor = false;
+    }
+
+    /**
+     * Update the mini map based on the Area
+     * @param area (Area)
+     */
+    private void updateMap(Area area) {
+        mapSpriteName = "../backgrounds/" + area.getTitle();
+
     }
 
     /// Getter and setter for interaction
@@ -70,13 +81,13 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
      * Indicate the player just passed a door
      * @param door (Door): the door passed, not null
      */
-    protected void setIsPassingADoor(Door door){
+    protected void setIsPassingADoor(Door door) {
         this.passedDoor = door;
         isPassingADoor = true;
     }
 
-    /**@return (boolean): true if the player is passing a door*/
-    public boolean isPassingADoor(){
+    /** @return (boolean): true if the player is passing a door */
+    public boolean isPassingADoor() {
         return isPassingADoor;
     }
 
@@ -84,7 +95,8 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
      * Getter of the passing door
      * @return (Door)
      */
-    public Door passedDoor(){
+    public Door passedDoor() {
         return passedDoor;
     }
+
 }

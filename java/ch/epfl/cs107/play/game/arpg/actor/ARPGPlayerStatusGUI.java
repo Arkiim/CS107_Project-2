@@ -8,7 +8,7 @@ import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Canvas;
 
 public class ARPGPlayerStatusGUI implements Graphics {
-	private static final float DEPTH = 1000.f;
+	private static final float DEPTH = 2000.f;
  	
 	private float depth;
 	private String spriteName;
