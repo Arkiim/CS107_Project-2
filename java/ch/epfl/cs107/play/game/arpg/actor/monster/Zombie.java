@@ -21,193 +21,200 @@ import ch.epfl.cs107.play.window.Canvas;
 
 public class Zombie extends Monster {
 
-	private static final Orientation[] ORIENTATIONS = { Orientation.UP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT };
-	private static final int ANIMATION_DURATION = 8;
-	private static final int MOVE_DURATION = 35;
-	private static final float MAX_HP = 8;
+    private static final Orientation[] ORIENTATIONS = {Orientation.UP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT};
+    private static final int ANIMATION_DURATION = 8;
+    private static final int MOVE_DURATION = 35;
+    private static final float MAX_HP = 8;
 
 
-	private final static int MIN_INACTION_DURATION = 35;
-	private final static int MAX_INACTION_DURATION = 60;
+    private final static int MIN_INACTION_DURATION = 35;
+    private final static int MAX_INACTION_DURATION = 60;
 
-	private final static float DELTA_ANCHOR = 0.5f;
+    private final static float DELTA_ANCHOR = 0.5f;
 
-	private static final int GRAVE_DURATION = 100;
-	private final static double DAMAGE_PROBABILITY_GRAVE = 0.2;
-	public static final int ATTACK_ANIM_DURATION = 16;
-	private static final float DAMAGE = 1.0f;
+    private static final int GRAVE_DURATION = 100;
+    private final static double DAMAGE_PROBABILITY_GRAVE = 0.2;
+    public static final int ATTACK_ANIM_DURATION = 16;
+    private static final float DAMAGE = 1.0f;
 
-	private static Vulnerability[] VULNERABILITIES = { Vulnerability.PHYSICAL, Vulnerability.MAGICAL};
+    private static Vulnerability[] VULNERABILITIES = {Vulnerability.PHYSICAL, Vulnerability.MAGICAL};
 
-	private Sprite graveSprite;
+    private Sprite graveSprite;
 
-	private ZombieState currentState;
+    private ZombieState currentState;
 
-	private int inactionDuration;
+    private int inactionDuration;
 
-	private final ZombieHealer healer;
-	private int attackAnimCount;
+    private final ZombieHealer healer;
+    private int attackAnimCount;
 
-	private List<DamageReceiver> dmgVictims;
+    private List<DamageReceiver> dmgVictims;
 
-	public Zombie(Area area, Orientation orientation, DiscreteCoordinates position ) {
-		super(area, orientation, position, MAX_HP, VULNERABILITIES, DAMAGE);
+    public Zombie(Area area, Orientation orientation, DiscreteCoordinates position) {
+        super(area, orientation, position, MAX_HP, VULNERABILITIES, DAMAGE);
 
-		Sprite[][] spriteArrays = RPGSprite.extractSprites("addedSprites/Zombie1.2", 4, 1, 2, this, 16, 32, ORIENTATIONS);
-		setAnimations(RPGSprite.createAnimations(ANIMATION_DURATION, spriteArrays, true));
-		setCurrentAnim(getAnimations()[getOrientation().ordinal()]);
+        Sprite[][] spriteArrays = RPGSprite.extractSprites("addedSprites/Zombie1.2", 4, 1, 2, this, 16, 32, ORIENTATIONS);
+        setAnimations(RPGSprite.createAnimations(ANIMATION_DURATION, spriteArrays, true));
+        setCurrentAnim(getAnimations()[getOrientation().ordinal()]);
 
-		graveSprite = new RPGSprite("addedSprites/grave", 2, 2, this, new RegionOfInterest(0, 0, 32, 32),
-				new Vector(-DELTA_ANCHOR, DELTA_ANCHOR), 1, 2.f);
+        graveSprite = new RPGSprite("addedSprites/grave", 2, 2, this, new RegionOfInterest(0, 0, 32, 32),
+                                    new Vector(-DELTA_ANCHOR, DELTA_ANCHOR), 1, 2.f);
 
-		currentState = ZombieState.IDLE;
-		inactionDuration = MIN_INACTION_DURATION
-				+ RandomGenerator.getInstance().nextInt(MAX_INACTION_DURATION - MIN_INACTION_DURATION + 1);
+        currentState = ZombieState.IDLE;
+        inactionDuration = MIN_INACTION_DURATION
+                           + RandomGenerator.getInstance().nextInt(MAX_INACTION_DURATION - MIN_INACTION_DURATION + 1);
 
-		setHandler(new ZombieInteractionHandler());
+        setHandler(new ZombieInteractionHandler());
 
 
-		healer = new ZombieHealer();
+        healer = new ZombieHealer();
 
-		dmgVictims = new ArrayList<DamageReceiver>();
-	}
+        dmgVictims = new ArrayList<DamageReceiver>();
+    }
 
-	@Override
-	public boolean wantsCellInteraction() {
-		return false;
-	}
+    @Override
+    public boolean wantsCellInteraction() {
+        return false;
+    }
 
-	@Override
-	public boolean wantsViewInteraction() {
-		return (currentState != ZombieState.GRAVE);
-	}
+    @Override
+    public boolean wantsViewInteraction() {
+        return (currentState != ZombieState.GRAVE);
+    }
 
-	@Override
-	protected void dropItem() {
-		Heart heart = new Heart(getOwnerArea(), getOrientation(), getCurrentMainCellCoordinates());
+    @Override
+    protected void dropItem() {
+        Heart heart = new Heart(getOwnerArea(), getOrientation(), getCurrentMainCellCoordinates());
 
-		if(getOwnerArea().canEnterAreaCells(heart, Collections.singletonList(getCurrentMainCellCoordinates()))) {
-			getOwnerArea().registerActor(heart);
-		}
-	}
+        if (getOwnerArea().canEnterAreaCells(heart, Collections.singletonList(getCurrentMainCellCoordinates()))) {
+            getOwnerArea().registerActor(heart);
+        }
+    }
 
-	@Override
-	protected void movement() {
-		orientate(Orientation.values()[RandomGenerator.getInstance().nextInt(4)]);
-		setCurrentAnim(getAnimations()[getOrientation().ordinal()]);
-		move(MOVE_DURATION);
-	}
+    @Override
+    protected void movement() {
+        orientate(Orientation.values()[RandomGenerator.getInstance().nextInt(4)]);
+        setCurrentAnim(getAnimations()[getOrientation().ordinal()]);
+        move(MOVE_DURATION);
+    }
 
-	@Override
-	protected void animationUpdate(float deltaTime) {
-		if(currentState == ZombieState.ATTACKING || isDisplacementOccurs() || getIsDead()) {
-			getCurrentAnim().update(deltaTime);
-		} else {
-			getCurrentAnim().reset();
-		}
-	}
+    @Override
+    protected void animationUpdate(float deltaTime) {
+        if (currentState == ZombieState.ATTACKING || isDisplacementOccurs() || getIsDead()) {
+            getCurrentAnim().update(deltaTime);
+        } else {
+            getCurrentAnim().reset();
+        }
+    }
 
-	private void action() {
-		switch(currentState) {
-			case IDLE :
-				movement();
-				inactionDuration = MIN_INACTION_DURATION + RandomGenerator.getInstance().nextInt(MAX_INACTION_DURATION - MIN_INACTION_DURATION + 1);
-				break;
+    private void action() {
+        switch (currentState) {
+            case IDLE:
+                movement();
+                inactionDuration =
+                        MIN_INACTION_DURATION + RandomGenerator.getInstance().nextInt(MAX_INACTION_DURATION - MIN_INACTION_DURATION + 1);
+                break;
 
-			case GRAVE :
-				currentState = ZombieState.IDLE;
-				this.receiveDmg(healer);
-				inactionDuration = 0;
-				break;
+            case GRAVE:
+                currentState = ZombieState.IDLE;
+                this.receiveDmg(healer);
+                inactionDuration = 0;
+                break;
 
-			default:
-				break;
-		}
-	}
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public void update(float deltaTime) {
-		--inactionDuration;
+    @Override
+    public void update(float deltaTime) {
+        --inactionDuration;
 
-		if(currentState == ZombieState.ATTACKING) {
-			--attackAnimCount;
+        if (currentState == ZombieState.ATTACKING) {
+            --attackAnimCount;
 
-			if (attackAnimCount <= 0) {
-				currentState = ZombieState.IDLE;
-			}
+            if (attackAnimCount <= 0) {
+                currentState = ZombieState.IDLE;
+            }
 
-		} else if(inactionDuration <= 0) {
-			action();
-			dmgVictims.clear();
-		}
+        } else if (inactionDuration <= 0) {
+            action();
+            dmgVictims.clear();
+        }
 
-		super.update(deltaTime);
-	}
+        super.update(deltaTime);
+    }
 
-	@Override
-	public void draw(Canvas canvas) {
-		if(currentState == ZombieState.GRAVE && !getIsDead()) {
-			graveSprite.draw(canvas);
-		} else {
-			super.draw(canvas);
-		}
-	}
+    @Override
+    public void draw(Canvas canvas) {
+        if (currentState == ZombieState.GRAVE && !getIsDead()) {
+            graveSprite.draw(canvas);
+        } else {
+            super.draw(canvas);
+        }
+    }
 
-	@Override
-	public void receiveDmg(DmgInteractionVisitor v) {
-		if( ((currentState != ZombieState.GRAVE))
-				|| (RandomGenerator.getInstance().nextDouble() <= DAMAGE_PROBABILITY_GRAVE) ) {
+    @Override
+    public void receiveDmg(DmgInteractionVisitor v) {
+        if (((currentState != ZombieState.GRAVE))
+            || (RandomGenerator.getInstance().nextDouble() <= DAMAGE_PROBABILITY_GRAVE)) {
 
-			super.receiveDmg(v);
+            super.receiveDmg(v);
 
-			if(getHp() <= 2) {
-				currentState = ZombieState.GRAVE;
-				inactionDuration = GRAVE_DURATION;
-			}
-		}
-	}
+            if (getHp() <= 2) {
+                currentState = ZombieState.GRAVE;
+                inactionDuration = GRAVE_DURATION;
+            }
+        }
+    }
 
-	/**
-	 * know if a DamageReceiver (victim) is in dmgVictims
-	 * @param victim
-	 * @return boolean
-	 */
-	private boolean wasDmgDealt(DamageReceiver victim) {
-		return dmgVictims.contains(victim);
-	}
+    /**
+     * know if a DamageReceiver (victim) is in dmgVictims
+     * @param victim
+     * @return boolean
+     */
+    private boolean wasDmgDealt(DamageReceiver victim) {
+        return dmgVictims.contains(victim);
+    }
 
-	private void dmgDealt(DamageReceiver victim) {
-		dmgVictims.add(victim);
-	}
+    private void dmgDealt(DamageReceiver victim) {
+        dmgVictims.add(victim);
+    }
 
-	private enum ZombieState {
-		IDLE,
-		ATTACKING,
-		GRAVE;
-	}
+    private enum ZombieState {
+        IDLE,
+        ATTACKING,
+        GRAVE;
+    }
 
-	private class ZombieHealer implements DmgInteractionVisitor {
+    private class ZombieHealer implements DmgInteractionVisitor {
 
-		@Override
-		public float getDmg() {
-			return (getHp() - MAX_HP);
-		}
+        @Override
+        public float getDmg() {
+            return (getHp() - MAX_HP);
+        }
 
-	}
+    }
 
-	private class ZombieInteractionHandler extends MonsterInteractionHandler {
 
-		@Override
-		public void interactWith(ARPGPlayer player) {
-			if(!wasDmgDealt(player)) {
-				Zombie.this.currentState = ZombieState.ATTACKING;
-				attackAnimCount = ATTACK_ANIM_DURATION;
+    /** Inner interaction handler ZombieInteractionHandler */
 
-				player.receiveDmg(Zombie.this);
-				dmgDealt(player);
-			}
-		}
-	}
+    private class ZombieInteractionHandler extends MonsterInteractionHandler {
+
+        @Override
+        public void interactWith(ARPGPlayer player) {
+            if (!wasDmgDealt(player)) {
+                Zombie.this.currentState = ZombieState.ATTACKING;
+                attackAnimCount = ATTACK_ANIM_DURATION;
+
+                if (!ARPGPlayer.debugMode) {
+                    player.receiveDmg(Zombie.this);
+                    dmgDealt(player);
+                }
+            }
+        }
+
+    }
 
 
 }

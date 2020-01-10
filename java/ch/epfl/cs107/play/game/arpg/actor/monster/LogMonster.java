@@ -286,7 +286,7 @@ public class LogMonster extends Monster {
         @Override
         public void interactWith(ARPGPlayer player) {
             if (currentState == LogMonsterState.ATTACKING) {
-                player.receiveDmg(LogMonster.this);
+               if(!ARPGPlayer.debugMode) player.receiveDmg(LogMonster.this);
                 currentState = LogMonsterState.FALLING_ASLEEP;
 
             } else {

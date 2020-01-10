@@ -34,7 +34,7 @@ import ch.epfl.cs107.play.window.Keyboard;
 
 public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageReceiver, MonsterAttacker, Reader {
 
-    private final static int ANIMATION_DURATION = 4;
+    private final static int ANIMATION_DURATION = 2;
     private final static int BATTLE_ANIMATION_DURATION = 3;
     private final static float BATTLE_DELTA = -0.5f;
 
@@ -48,25 +48,20 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private ARPGPlayerHandler handler;
 
     private final Sprite[][] defaultSprites;
-    private final Sprite[] defaultGardSprites;
-    private final Sprite[] gardBowSprites;
-    private final Sprite[] gardSwordSprites;
-    private final Sprite[] gardStaffSprites;
+    private final Sprite[] defaultGuardSprites;
+    private final Sprite[] guardBowSprites;
+    private final Sprite[] guardSwordSprites;
+    private final Sprite[] guardStaffSprites;
     private final Sprite graveSprite;
-
 
     private final Sprite[][] battleBowSprites;
     private final Sprite[][] battleSwordSprites;
     private final Sprite[][] battleStaffSprites;
 
-
-    private Animation[] playerAnimationsBow;
-    private Animation[] playerAnimationsSword;
-
     /** Order for the sprites of Bow, Staff_Animation and Sword */
     private final static Orientation[] orderBSAS = new Orientation[]{Orientation.DOWN, Orientation.UP, Orientation.RIGHT, Orientation.LEFT};
 
-    /** Order for the sprites of Staff_Gard, and Player */
+    /** Order for the sprites of Staff_guard, and Player */
     private final static Orientation[] orderSGP = new Orientation[]{Orientation.DOWN, Orientation.RIGHT, Orientation.UP, Orientation.LEFT};
 
     private Animation battleAnimation;
@@ -89,7 +84,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     private boolean dontCutGrass;
     private boolean isJustCreated;
-    private boolean debugMode;
+    public static boolean debugMode;
 
     private State state;
     private State oldState;
@@ -97,9 +92,10 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private Vulnerability currentAttackType;
     private float currentDmg;
 
+    private Area oldArea;
+
     /**
      * Constructor of ARPGPlayer, initialize hp, sprites, animations, currentItem and the handler (of type ARPGHandler)
-     *
      * @param owner (Area)
      * @param orientation (Orientation)
      * @param coordinates (DiscreteCoordinates)
@@ -107,34 +103,35 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     public ARPGPlayer(Area owner, Orientation orientation, DiscreteCoordinates coordinates) {
         super(owner, orientation, coordinates);
 
+        oldArea = owner;
+
         //Create Default Sprites
         defaultSprites = RPGSprite.extractSprites("zelda/player", 4, 1, 2, this, 16, 32, orderSGP);
-        defaultGardSprites = createSpritesColumn("zelda/player", 0, 4, 16, 32, 1, 2, orderSGP);
+        defaultGuardSprites = createSpritesColumn("zelda/player", 0, 4, 16, 32, 1, 2, orderSGP);
 
         //Create Death Sprite
         graveSprite = new RPGSprite("addedSprites/grave", 2, 2, this);
 
-        //Creates "Garde" Sprites
-        gardBowSprites = createSpritesColumn("zelda/player.bow", 0, 4, 32, 32, 2, 2, orderBSAS);
-        gardSwordSprites = createSpritesColumn("zelda/player.sword", 0, 4, 32, 32, 2, 2, orderBSAS);
-        gardStaffSprites = createSpritesColumn("addedSprites/playerStaff", 0, 4, 16, 32, 1, 2, orderSGP);
+        //Creates "guard" Sprites
+        guardBowSprites = createSpritesColumn("zelda/player.bow", 0, 4, 32, 32, 2, 2, orderBSAS);
+        guardSwordSprites = createSpritesColumn("zelda/player.sword", 0, 4, 32, 32, 2, 2, orderBSAS);
+        guardStaffSprites = createSpritesColumn("addedSprites/playerStaff", 0, 4, 16, 32, 1, 2, orderSGP);
 
-        //Create battle Sprites used in the methode createAnimations
+        //Create battle Sprites used in the method createAnimations
         battleBowSprites = RPGSprite.extractSprites("zelda/player.bow", 4, 2, 2, this, 32, 32, orderBSAS);
         battleSwordSprites = RPGSprite.extractSprites("zelda/player.sword", 4, 2, 2, this, 32, 32, orderBSAS);
         battleStaffSprites = RPGSprite.extractSprites("zelda/player.staff_water", 3, 2, 2, this, 32, 32, orderBSAS);
 
         defaultAnimations = RPGSprite.createAnimations(ANIMATION_DURATION, defaultSprites, true);
         //Battle / combat Animations
-        playerAnimationsBow = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleBowSprites, false);
-        playerAnimationsSword = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleSwordSprites, false);
-        Animation[] playerAnimationsStaff;
-        playerAnimationsStaff = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleStaffSprites, false);
+        Animation[] playerAnimationsBow = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleBowSprites, false);
+        Animation[] playerAnimationsSword = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleSwordSprites, false);
+        Animation[] playerAnimationsStaff = RPGSprite.createAnimations(BATTLE_ANIMATION_DURATION, battleStaffSprites, false);
 
         //Correcting the Anchor of the Sprites / animations
-        AreaEntity.setAnchor(gardBowSprites, BATTLE_DELTA, 0);
+        AreaEntity.setAnchor(guardBowSprites, BATTLE_DELTA, 0);
         AreaEntity.setAnchor(playerAnimationsBow, BATTLE_DELTA, 0);
-        AreaEntity.setAnchor(gardSwordSprites, BATTLE_DELTA, 0);
+        AreaEntity.setAnchor(guardSwordSprites, BATTLE_DELTA, 0);
         AreaEntity.setAnchor(playerAnimationsSword, BATTLE_DELTA, 0);
         AreaEntity.setAnchor(playerAnimationsStaff, BATTLE_DELTA, 0);
 
@@ -162,7 +159,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         setGoldCount();
 
         miniMap = new ARPGPlayerStatusGUI(getMapSpriteName(), new RegionOfInterest(32, 0, 480, 480), 2.3f, true,
-                                          10.69f, - 2.3f);
+                                          10.69f, -2.3f);
 
         this.state = State.IDLE;
         this.oldState = State.IDLE;
@@ -170,7 +167,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         isJustCreated = true;
         debugMode = false;
     }
-//t
+
+    //t
     @Override
     public void update(float deltaTime) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
@@ -215,7 +213,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
             battleAnimation.update(deltaTime);
 
-            //if the currentItemStatus don't match the actual current item, resulting in a false icon => update the icon
+            //if the currentItemStatus doesn't match the actual current item, resulting in a false icon => update the icon
             if (!currentItemStatus.getSpriteName().equals(getCurrentItem().getSpriteName())) {
                 setIcon();
             }
@@ -226,14 +224,19 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             //Update Gold Count
             setGoldCount();
 
+            if (!getOwnerArea().equals(oldArea)) {
+                setMiniMap();
+                oldArea = getOwnerArea();
+            }
+
             if (getHp() <= 0) {
                 state = State.DEAD;
             }
 
             //for testing purposes
             if (keyboard.get(Keyboard.SHIFT).isDown() && (keyboard.get(Keyboard.J).isPressed()) && (keyboard.get(Keyboard.O).isPressed())) {
-                if (!debugMode) { debugMode = true; } else { debugMode = false; }
-                System.out.println(debugMode);
+                debugMode = !debugMode;
+                System.out.println(debugMode ? "debugMode on" : "debugMode off");
             }
 
             if (debugMode) {
@@ -435,7 +438,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     /**
      * Getter used in ARPGInventory to check and handle the limited cases and possible issues/bug that could happen when removing items, if
      * it's the item equipped or not etc...
-     *
      * @return currentItem (int)
      */
     protected static int getCItem() {
@@ -465,7 +467,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     /**
      * Indicates if the player's current Orientation is the same as the given orientation
-     *
      * @param orientation (Orientation)
      * @return true/false
      */
@@ -476,7 +477,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     /**
      * If the player is moving, update the animation to keep the right animation at all times. And if he isn't reset the animation so that
      * he don't have any animation while standing still.
-     *
      * @param deltaTime (float)
      */
     private void animationUpdate(float deltaTime) {
@@ -595,7 +595,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     /**
      * Return the right Sprite[][] Arrays, corresponding to the item currentlyEquipped
-     *
      * @return (Sprite[][])
      */
     private Sprite[][] chooseBattleSprites() {
@@ -617,22 +616,21 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     /**
      * Return the right Sprite[] Arrays, corresponding to the item currentlyEquipped
-     *
      * @return (Sprite[])
      */
-    private Sprite[] chooseGardeSprites() {
+    private Sprite[] chooseGuardSprites() {
         switch ((ARPGItem) getCurrentItem()) {
             case SWORD:
-                return gardSwordSprites;
+                return guardSwordSprites;
 
             case BOW:
-                return gardBowSprites;
+                return guardBowSprites;
 
             case STAFF:
-                return gardStaffSprites;
+                return guardStaffSprites;
 
             default:
-                return defaultGardSprites;
+                return defaultGuardSprites;
         }
     }
 
@@ -643,51 +641,54 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      */
     @Override
     public void draw(Canvas canvas) {
-        if (true) {
-            miniMap.draw(canvas);
-        } else {
+        if (isDead()) {
+            graveSprite.draw(canvas);
+            new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300),
+                          new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
 
-            if (isDead()) {
-                graveSprite.draw(canvas);
-                new RPGSprite("addedSprites/deathScreenRF", 13, 5, this, new RegionOfInterest(0, 0, 1350, 300),
-                              new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
+        } else {
+            miniMap.draw(canvas);
+            gearStatus.draw(canvas);
+            currentItemStatus.draw(canvas);
+
+            for (ARPGPlayerStatusGUI heart : hearts) {
+                heart.draw(canvas);
+            }
+
+            goldDisplay.draw(canvas);
+
+            for (ARPGPlayerStatusGUI goldDigit : goldCountDisplay) {
+                goldDigit.draw(canvas);
+            }
+
+            if (isJustCreated) {
+                animation.draw(canvas);
+
+            } else if ((!isDisplacementOccurs() && !isIdle()) || (!battleAnimation.isCompleted())) {
+                battleAnimation.draw(canvas);
+
+            } else if (!isDisplacementOccurs()) {
+                chooseGuardSprites()[getOrientation().ordinal()].draw(canvas);
 
             } else {
-                //miniMap.draw(canvas);
-                gearStatus.draw(canvas);
-                currentItemStatus.draw(canvas);
-
-                for (ARPGPlayerStatusGUI heart : hearts) {
-                    heart.draw(canvas);
-                }
-
-                goldDisplay.draw(canvas);
-
-                for (ARPGPlayerStatusGUI goldDigit : goldCountDisplay) {
-                    goldDigit.draw(canvas);
-                }
-
-                if (isJustCreated) {
-                    animation.draw(canvas);
-
-                } else if ((!isDisplacementOccurs() && !isIdle()) || (!battleAnimation.isCompleted())) {
-                    battleAnimation.draw(canvas);
-
-                } else if (!isDisplacementOccurs()) {
-                    chooseGardeSprites()[getOrientation().ordinal()].draw(canvas);
-
-                } else {
-                    animation.draw(canvas);
-                }
+                animation.draw(canvas);
             }
         }
     }
+    //}
 
     /**
      * Sets the item icon to match the item currently used
      */
     private void setIcon() {
         currentItemStatus.setSpriteName(getCurrentItem().getSpriteName());
+    }
+
+    /**
+     * Update the mini map by updating the name/path of the Sprite of the miniMap for the currentArea
+     */
+    private void setMiniMap() {
+        miniMap.setSpriteName(getMapSpriteName());
     }
 
     /**
@@ -814,9 +815,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         }
 
         @Override
-        public void interactWith(Monster monster) {
-            monster.receiveDmg(ARPGPlayer.this);
-        }
+        public void interactWith(Monster monster) { monster.receiveDmg(ARPGPlayer.this); }
 
         @Override
         public void interactWith(CastleKey key) {

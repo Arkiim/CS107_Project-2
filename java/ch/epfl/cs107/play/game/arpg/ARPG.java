@@ -19,8 +19,8 @@ import ch.epfl.cs107.play.window.Window;
 
 public class ARPG extends RPG{ 
 
-	private final static String areas[] = {"zelda/Village"};
-	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(17,5)};//, new DiscreteCoordinates(6,7)
+	private final static String areas[] = {"zelda/RouteTemple"};
+	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(3,3)};//, new DiscreteCoordinates(6,7) 17,5
 	private static int areaIndex = 0;
 	private static boolean wantsReset=false;
 

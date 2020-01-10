@@ -365,6 +365,4 @@ public abstract class Monster extends MovableAreaEntity implements Interactor, M
 	abstract class MonsterInteractionHandler implements ARPGInteractionVisitor {
 	}
 
-	;
-
 }

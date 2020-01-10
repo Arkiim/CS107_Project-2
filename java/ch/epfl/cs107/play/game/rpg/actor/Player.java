@@ -17,6 +17,7 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
     private boolean isPassingADoor;
     private Door passedDoor;
     private String mapSpriteName;
+    private static final String beginPath = "../miniMap/";
 
     /**
      * Default Player constructor
@@ -28,8 +29,8 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
         super(area, orientation, coordinates);
         passedDoor = null;
         isPassingADoor = false;
-        mapSpriteName = "../backgrounds/" + area.getTitle();
-        //mapSprite = new RPGSprite("../backgrounds/" + area.getTitle(), 16, 16, this);
+
+        mapSpriteName = beginPath + area.getTitle();
     }
 
     protected String getMapSpriteName() {
@@ -71,7 +72,7 @@ public abstract class Player extends MovableAreaEntity implements Interactor {
      * @param area (Area)
      */
     private void updateMap(Area area) {
-        mapSpriteName = "../backgrounds/" + area.getTitle();
+        mapSpriteName = beginPath + area.getTitle();
 
     }
 

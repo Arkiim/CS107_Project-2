@@ -27,7 +27,7 @@ public class Play {
 	 */
 	public static void main(String[] args) {
 
-		// Define cascading file syste
+		// Define cascading file system
 		final FileSystem fileSystem = new ResourceFileSystem(DefaultFileSystem.INSTANCE);
 
         // Create a demo game and initialize corresponding texts

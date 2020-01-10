@@ -41,7 +41,7 @@ public class FolderFileSystem implements FileSystem {
         // If parent is null then the new File instance is created as if by invoking the single-argument
         // File constructor on the given child pathname string.
         File file = new File(folder, name);
-        System.out.println(file.getAbsolutePath());
+       // System.out.println(file.getAbsolutePath());
         if (file.canRead()) {
             return new FileInputStream(file);
         }

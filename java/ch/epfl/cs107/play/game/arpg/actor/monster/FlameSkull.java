@@ -141,12 +141,14 @@ public class FlameSkull extends Monster implements FlyableEntity{
 		super.draw(canvas);
 	}
 
+
 	/** Inner class FlameSkullInteractionHandler **/
+
 	private class FlameSkullInteractionHandler extends MonsterInteractionHandler implements ARPGInteractionVisitor {
 
 		@Override
 		public void interactWith(ARPGPlayer player) {
-			if(!wasDmgDealt(player)) {
+			if(!wasDmgDealt(player) && !ARPGPlayer.debugMode) {
 				player.receiveDmg(FlameSkull.this);
 				dmgDealt(player);
 			}
