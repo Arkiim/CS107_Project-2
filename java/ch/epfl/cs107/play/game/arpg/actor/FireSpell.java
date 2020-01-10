@@ -240,7 +240,7 @@ public class FireSpell extends AreaEntity implements MonsterAttacker, Interactor
 		 */
 		@Override
 		public void interactWith(ARPGPlayer player) {
-			if (!wasDmgDealt(player)) {
+			if (!wasDmgDealt(player) && !ARPGPlayer.debugMode) {
 				player.receiveDmg(FireSpell.this);
 				dmgDealt(player);
 			}
