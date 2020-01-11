@@ -19,8 +19,8 @@ import ch.epfl.cs107.play.window.Window;
 
 public class ARPG extends RPG{ 
 
-	private final static String areas[] = {"zelda/Village"};
-	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(17,5)};//, new DiscreteCoordinates(6,7)
+	private final static String areas[] = {"zelda/Ferme"};
+	private final DiscreteCoordinates positions[] = {new DiscreteCoordinates(8,5)};//, new DiscreteCoordinates(6,7)17,5
 	private static int areaIndex = 0;
 	private static boolean wantsReset=false;
 
@@ -65,6 +65,7 @@ public class ARPG extends RPG{
 		if (super.begin(window, fileSystem)) {
 			createAreas();
 			initPlayer(new ARPGPlayer(setCurrentArea(areas[areaIndex], true), Orientation.UP, positions[areaIndex]));
+
 			return true; 
 
 		} else { 

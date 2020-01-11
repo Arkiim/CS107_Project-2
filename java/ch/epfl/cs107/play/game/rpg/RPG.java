@@ -45,7 +45,7 @@ public abstract class RPG extends AreaGame {
 
         // Implementation of the teleport
         if(player.isPassingADoor()){
-            Door door = player.passedDoor();
+            Door door = player.getPassedDoor();
             player.leaveArea();
             Area area = setCurrentArea(door.getDestination(), false);
             player.enterArea(area, door.getOtherSideCoordinates());

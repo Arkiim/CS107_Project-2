@@ -3,13 +3,11 @@ package ch.epfl.cs107.play.game.arpg.actor;
 import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.cs107.play.game.actor.ImageGraphics;
 import ch.epfl.cs107.play.game.areagame.Area;
-import ch.epfl.cs107.play.game.areagame.actor.Animation;
-import ch.epfl.cs107.play.game.areagame.actor.AreaEntity;
-import ch.epfl.cs107.play.game.areagame.actor.Interactable;
-import ch.epfl.cs107.play.game.areagame.actor.Orientation;
-import ch.epfl.cs107.play.game.areagame.actor.Sprite;
+import ch.epfl.cs107.play.game.areagame.actor.*;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
+import ch.epfl.cs107.play.game.areagame.io.ResourcePath;
 import ch.epfl.cs107.play.game.arpg.ARPG;
 import ch.epfl.cs107.play.game.arpg.actor.monster.FlameSkull;
 import ch.epfl.cs107.play.game.arpg.actor.monster.LogMonster;
@@ -34,7 +32,7 @@ import ch.epfl.cs107.play.window.Keyboard;
 
 public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageReceiver, MonsterAttacker, Reader {
 
-    private final static int ANIMATION_DURATION = 2;
+    private final static int ANIMATION_DURATION = 7;
     private final static int BATTLE_ANIMATION_DURATION = 3;
     private final static float BATTLE_DELTA = -0.5f;
 
@@ -82,17 +80,18 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private ARPGPlayerStatusGUI[] goldCountDisplay;
     private ARPGPlayerStatusGUI miniMap;
 
+    private ARPGRedDot mapDot;
+
     private boolean dontCutGrass;
     private boolean isJustCreated;
     public static boolean debugMode;
+    private boolean firstDoorPassed;
 
     private State state;
     private State oldState;
 
     private Vulnerability currentAttackType;
     private float currentDmg;
-
-    private Area oldArea;
 
     /**
      * Constructor of ARPGPlayer, initialize hp, sprites, animations, currentItem and the handler (of type ARPGHandler)
@@ -102,8 +101,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      */
     public ARPGPlayer(Area owner, Orientation orientation, DiscreteCoordinates coordinates) {
         super(owner, orientation, coordinates);
-
-        oldArea = owner;
 
         //Create Default Sprites
         defaultSprites = RPGSprite.extractSprites("zelda/player", 4, 1, 2, this, 16, 32, orderSGP);
@@ -137,6 +134,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         this.handler = new ARPGPlayerHandler();
 
+        firstDoorPassed = false;
         hp = MAX_HP;
 
         inventory = new ARPGInventory();
@@ -161,6 +159,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         miniMap = new ARPGPlayerStatusGUI(getMapSpriteName(), new RegionOfInterest(32, 0, 480, 480), 2.3f, true,
                                           10.69f, -2.3f);
 
+        mapDot = new ARPGRedDot(owner, orientation, coordinates);
+        mapDot.register();
+
         this.state = State.IDLE;
         this.oldState = State.IDLE;
         dontCutGrass = false;
@@ -172,6 +173,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     @Override
     public void update(float deltaTime) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
+        if (!isJustCreated) { mapDot.register(); }
 
         if (!isReading() && !isDead()) {
 
@@ -224,11 +226,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             //Update Gold Count
             setGoldCount();
 
-            if (!getOwnerArea().equals(oldArea)) {
-                setMiniMap();
-                oldArea = getOwnerArea();
-            }
-
             if (getHp() <= 0) {
                 state = State.DEAD;
             }
@@ -276,10 +273,8 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             ARPG.setWantsReset(true);
             Area.setWantsReset(true);
         }
-
         super.update(deltaTime);
     }
-
 
     /**
      * Get to the next inventory item, (in a closed circle, if the end is reached => goes back the 1st item)
@@ -426,7 +421,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         currentDmg = 2;
     }
 
-
     /**
      * @return the index currentItem of the List part of the inventory => returns an InventoryItem
      */
@@ -557,7 +551,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         ((ARPGInteractionVisitor) v).interactWith(this);
     }
 
-
     @Override
     public void startReading(Readable readable) {
         oldState = state;
@@ -583,7 +576,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         oldState = State.READING;
         readable.toggleIsBeingRead();
     }
-
 
     /**
      * @return true if the player isReading false otherwise
@@ -633,7 +625,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 return defaultGuardSprites;
         }
     }
-
 
     /**
      * COnception because there are a lot of monsters, Player should always be "en garde", Thus, he should always be drawn with a weapon
@@ -781,6 +772,13 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         return currentAttackType;
     }
 
+    @Override //Added the concept of mini Map and dot moving on it
+    public void enterArea(Area area, DiscreteCoordinates position) {
+        mapDot.unregister();
+        super.enterArea(area, position);
+        setMiniMap();
+        mapDot.register();
+    }
 
     /*********** Inner Private Class ARPGPlayerHandler of ARPGPlayer, handling interaction on the most "specific" level  **********/
 
@@ -788,6 +786,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
         @Override
         public void interactWith(Door door) {
+            firstDoorPassed = true;
             setIsPassingADoor(door);
         }
 
@@ -815,7 +814,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         }
 
         @Override
-        public void interactWith(Monster monster) { monster.receiveDmg(ARPGPlayer.this); }
+        public void interactWith(Monster monster) {
+            monster.receiveDmg(ARPGPlayer.this);
+        }
 
         @Override
         public void interactWith(CastleKey key) {
@@ -849,7 +850,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                 }
 
                 ARPGPlayer.this.finishReading(mayor);
-
 
             }
         }
@@ -905,6 +905,72 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         DEAD,
         READING,
         PAUSE
+    }
+
+    /** Inner Class RedDot = Position of the ARPGPlayer on the miniMap */
+    private class ARPGRedDot extends Player.RedDot {
+
+        private Vector anchor;
+        private ImageGraphics display;
+        private static final float WIDTH = 0.20f;
+        private final float DEPTH = 30005.f;
+        private static final int dimensions = 32;
+        private float offsetX;
+        private float offsetY;
+
+        /**
+         * ARPGRedDot constructor
+         * @param area (Area): Owner area. Not null
+         * @param orientation (Orientation): Initial orientation of the entity. Not null
+         * @param position (DiscreteCoordinates): Initial position of the entity. Not null
+         */
+        public ARPGRedDot(Area area, Orientation orientation, DiscreteCoordinates position) {
+            super(area, orientation, position);
+            //sprite = new RPGSprite("addedSprites/HPBarRed", 0.25f, 0.25f, ARPGPlayer.this);
+            offsetX = 2.2f;
+            offsetY = 2.4f;
+        }
+
+        @Override
+        public void update(float deltaTime) {
+           // moveOrientate(getOrientation());
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+
+            float canvasWidth = canvas.getScaledWidth();
+            float canvasHeight = canvas.getScaledHeight();
+          //  anchor = canvas.getTransform().getOrigin().sub(new Vector(canvasWidth - offsetX, offsetY));
+            anchor = new Vector((-getOwnerArea().getWidth()+ARPGPlayer.this.getPosition().getX())/3,
+                                (-getOwnerArea().getHeight()+ARPGPlayer.this.getPosition().getY())/3);
+
+           // anchor = new Vector(0,0);
+            System.out.println(anchor);
+
+            display = new ImageGraphics(ResourcePath.getSprite("addedSprites/HPBarRed"),
+                                                      WIDTH, WIDTH, new RegionOfInterest(0, 0, dimensions, dimensions),
+                                                      new Vector(-anchor.getX(), -anchor.getY()), 1, DEPTH);
+            display.setParent(ARPGPlayer.this);
+
+            display.draw(canvas);
+        }
+
+        @Override
+        protected void register() {
+            ARPGPlayer.this.getOwnerArea().registerActor(this);
+        }
+
+        @Override
+        protected void unregister() {
+            ARPGPlayer.this.getOldArea().unregisterActor(this);
+        }
+
+        @Override
+        public List<DiscreteCoordinates> getCurrentCells() {
+            return ARPGPlayer.this.getCurrentCells();
+        }
+
     }
 
 }
