@@ -30,9 +30,8 @@ public class Play {
 		// Define cascading file system
 		final FileSystem fileSystem = new ResourceFileSystem(DefaultFileSystem.INSTANCE);
 
-        // Create a demo game and initialize corresponding texts
+        // Create a game and initialize corresponding texts
 		XMLTexts.initialize(fileSystem, "strings/icmon_fr.xml");
-
          Game game = new ARPG();
 
 		// Use Swing display
