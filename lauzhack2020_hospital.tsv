@@ -1,7 +1,7 @@
 hospital_id	StName	StNb	NPA	Town	Capacity	FreeBeds
 CHUV	Rue de Bugnon	21	1011	Lausanne	1554	233
 eHnv	Route de l'Hôpital	3	1436	Chamblon	330	
-Fédération des Hôpitaux	Bois de Cery	0	1008	Prilly	0	
+Fédération des Hôpitaux	Bois de Cery	0	1008	Prilly	0
 
 Patient_id	FirstName	LastName	Age	RiskFactor	HealthState	fk_hospital_id	fk_unitType_id
 0000	Jean	Michel	45	75	Grave	CHUV	test
