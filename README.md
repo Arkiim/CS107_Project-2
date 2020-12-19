@@ -11,13 +11,14 @@ CONTROLS :
 	    - A/B : make choice when talking to the mayor
 	
 	Test / Debug : 
-	 (Maintain:) SHIFT+ (Press:) O+P : Enable debug Mode to use the following features :
+	 (Maintain:) CTRL+SHIFT + (Press:) J+O : Enable debug Mode to use the following features :
 	    - L : make a LogMonster appear faced Up, in front of the player
 	    - K : make a FlameSkull appear faced Up, in front of the player
 	    - B : make a Bomb appear faced Up, in front of the player
 	    - F : make Fire appear faced Up, in front of the player
 	    - Z : make a Zombie appear near you,faced Up, in front of the player
-	    - I : add sword, bow, arrow, bomb, castle key to the inventory	
+	    - I : add sword, bow, arrow, bomb, castle key to the inventory
+	    - R : Reload the Game	
 	    		
 ________________________________________________________________________________________________
 	

@@ -166,5 +166,6 @@
 
 	<string name = "hint"> Through the orb, the arrow will show you the way to the Temple... </string>
 
+	<string name="bite">bite</string>
 
 </strings>

@@ -32,7 +32,7 @@ import ch.epfl.cs107.play.window.Keyboard;
 
 public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageReceiver, MonsterAttacker, Reader {
 
-    private final static int ANIMATION_DURATION = 7;
+    private final static int ANIMATION_DURATION = 4;
     private final static int BATTLE_ANIMATION_DURATION = 3;
     private final static float BATTLE_DELTA = -0.5f;
 
@@ -946,7 +946,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                                 (-getOwnerArea().getHeight()+ARPGPlayer.this.getPosition().getY())/3);
 
            // anchor = new Vector(0,0);
-            System.out.println(anchor);
+        //   System.out.println(anchor);
 
             display = new ImageGraphics(ResourcePath.getSprite("addedSprites/HPBarRed"),
                                                       WIDTH, WIDTH, new RegionOfInterest(0, 0, dimensions, dimensions),

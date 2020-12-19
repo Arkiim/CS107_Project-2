@@ -18,53 +18,55 @@ import java.util.prefs.AbstractPreferences;
  */
 public class Play {
 
-	/** One second in nano second */
+    /** One second in nano second */
     private static final float ONE_SEC = 1E9f;
 
-	/**
-	 * Main entry point.
-	 * @param args (Array of String): ignored
-	 */
-	public static void main(String[] args) {
+    /**
+     * Main entry point.
+     * @param args (Array of String): ignored
+     */
+    public static void main(String[] args) {
 
-		// Define cascading file system
-		final FileSystem fileSystem = new ResourceFileSystem(DefaultFileSystem.INSTANCE);
+        // Define cascading file system
+        final FileSystem fileSystem = new ResourceFileSystem(DefaultFileSystem.INSTANCE);
 
         // Create a game and initialize corresponding texts
-		XMLTexts.initialize(fileSystem, "strings/icmon_fr.xml");
-         Game game = new ARPG();
+        XMLTexts.initialize(fileSystem, "strings/icmon_fr.xml");
+        Game game = new ARPG();
 
-		// Use Swing display
-		final Window window = new SwingWindow(game.getTitle(), fileSystem, 700, 700);
-		
-		//Recorder recorder = new Recorder(window); 
-		//RecordReplayer replayer = new RecordReplayer(window); // not used in this project
-		try {
+        // Use Swing display
+        final Window window = new SwingWindow(game.getTitle(), fileSystem, 700, 700);
 
-			if (game.begin(window, fileSystem)) {
-			//	recorder.start();
-				//replayer.start("record1.xml");
+        //Recorder recorder = new Recorder(window);
+        //RecordReplayer replayer = new RecordReplayer(window); // not used in this project
+        try {
 
-				// Use system clock to keep track of time progression
+            if (game.begin(window, fileSystem)) {
+                //	recorder.start();
+                //replayer.start("record1.xml");
+
+                // Use system clock to keep track of time progression
                 long currentTime = System.nanoTime();
-				long lastTime;
-				final float frameDuration = ONE_SEC / game.getFrameRate();
+                final float frameDuration = ONE_SEC / game.getFrameRate();
 
-				// Run until the user try to close the window
-				while (!window.isCloseRequested()) {
+                // Run until the user try to close the window
+                while (!window.isCloseRequested()) {
 
-					// Compute time interval
-                    lastTime = currentTime;
-                    currentTime = System.nanoTime();
-					float deltaTime = (currentTime - lastTime);
-
-                    try {
-                        int timeDiff = Math.max(0, (int) (frameDuration - deltaTime));
-                        Thread.sleep((int) (timeDiff / 1E6), (int) (timeDiff % 1E6));
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread sleep interrupted");
+                    // Compute time interval
+                  long  lastTime = currentTime;
+                  currentTime = System.nanoTime();
+                    float deltaTime = (currentTime - lastTime);
+//
+                    if (frameDuration > deltaTime) {
+                        try {
+                            //int timeDiff = Math.max(0, (int) (frameDuration - deltaTime));
+                            int timeDiff = (int) (frameDuration - deltaTime);
+                            Thread.sleep((int) (timeDiff / 1E6), (int) (timeDiff % 1E6));
+                        } catch (InterruptedException e) {
+                            System.out.println("Thread sleep interrupted");
+                        }
                     }
-
+                    lastTime = currentTime; //TODO:REMVOE
                     currentTime = System.nanoTime();
                     deltaTime = (currentTime - lastTime) / ONE_SEC;
 
@@ -75,15 +77,15 @@ public class Play {
                     window.update();
                     //recorder.update();
                     //replayer.update();
-				}
-			}
-			//recorder.stop("record1.xml");
-			game.end();
+                }
+            }
+            //recorder.stop("record1.xml");
+            game.end();
 
-		} finally {
-			// Release resources
-			window.dispose();
-		}
-	}
+        } finally {
+            // Release resources
+            window.dispose();
+        }
+    }
 
 }
