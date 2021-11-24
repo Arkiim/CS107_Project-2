@@ -3,7 +3,10 @@
 
 ---
 
-### CONTROLS :
+###  MANUAL
+
+
+####   CONTROLS :
 
 	Play : 
 	    - arrows : move the player
