@@ -78,9 +78,9 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     private ARPGPlayerStatusGUI[] hearts;
     private ARPGPlayerStatusGUI goldDisplay;
     private ARPGPlayerStatusGUI[] goldCountDisplay;
-    private ARPGPlayerStatusGUI miniMap;
+    //private ARPGPlayerStatusGUI miniMap;
 
-    private ARPGRedDot mapDot;
+   //private ARPGRedDot mapDot;
 
     private boolean dontCutGrass;
     private boolean isJustCreated;
@@ -156,11 +156,13 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         goldCountDisplay = createGoldCount();
         setGoldCount();
 
+/*
         miniMap = new ARPGPlayerStatusGUI(getMapSpriteName(), new RegionOfInterest(32, 0, 480, 480), 2.3f, true,
                                           10.69f, -2.3f);
+*/
 
-        mapDot = new ARPGRedDot(owner, orientation, coordinates);
-        mapDot.register();
+        //mapDot = new ARPGRedDot(owner, orientation, coordinates);
+        //mapDot.register();
 
         this.state = State.IDLE;
         this.oldState = State.IDLE;
@@ -173,7 +175,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     @Override
     public void update(float deltaTime) {
         Keyboard keyboard = getOwnerArea().getKeyboard();
-        if (!isJustCreated) { mapDot.register(); }
+       // if (!isJustCreated) { mapDot.register(); }
 
         if (!isReading() && !isDead()) {
 
@@ -638,7 +640,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
                           new Vector(-6.5f, -1.5f), 0.6f, 3005).draw(canvas);
 
         } else {
-            miniMap.draw(canvas);
+            //miniMap.draw(canvas);
             gearStatus.draw(canvas);
             currentItemStatus.draw(canvas);
 
@@ -679,7 +681,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
      * Update the mini map by updating the name/path of the Sprite of the miniMap for the currentArea
      */
     private void setMiniMap() {
-        miniMap.setSpriteName(getMapSpriteName());
+        //miniMap.setSpriteName(getMapSpriteName());
     }
 
     /**
@@ -774,10 +776,10 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
 
     @Override //Added the concept of mini Map and dot moving on it
     public void enterArea(Area area, DiscreteCoordinates position) {
-        mapDot.unregister();
+        //mapDot.unregister();
         super.enterArea(area, position);
         setMiniMap();
-        mapDot.register();
+        //mapDot.register();
     }
 
     /*********** Inner Private Class ARPGPlayerHandler of ARPGPlayer, handling interaction on the most "specific" level  **********/
@@ -908,7 +910,7 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
     }
 
     /** Inner Class RedDot = Position of the ARPGPlayer on the miniMap */
-    private class ARPGRedDot extends Player.RedDot {
+    /*private class ARPGRedDot extends Player.RedDot {
 
         private Vector anchor;
         private ImageGraphics display;
@@ -918,12 +920,12 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
         private float offsetX;
         private float offsetY;
 
-        /**
+        *//**
          * ARPGRedDot constructor
          * @param area (Area): Owner area. Not null
          * @param orientation (Orientation): Initial orientation of the entity. Not null
          * @param position (DiscreteCoordinates): Initial position of the entity. Not null
-         */
+         *//*
         public ARPGRedDot(Area area, Orientation orientation, DiscreteCoordinates position) {
             super(area, orientation, position);
             //sprite = new RPGSprite("addedSprites/HPBarRed", 0.25f, 0.25f, ARPGPlayer.this);
@@ -971,6 +973,6 @@ public class ARPGPlayer extends Player implements InventoryItem.Holder, DamageRe
             return ARPGPlayer.this.getCurrentCells();
         }
 
-    }
+    }*/
 
 }

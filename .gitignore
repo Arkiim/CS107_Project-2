@@ -2,3 +2,7 @@
 records/
 pathBashGit.txt
 out
+*.class
+*.jar
+*.exe
+res/META-INF
