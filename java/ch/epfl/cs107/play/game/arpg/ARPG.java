@@ -58,7 +58,7 @@ public class ARPG extends RPG{
 	}
 
 	@Override
-	public String getTitle(){return "Gandalf the Red : Javassassinate the DarkLord";}
+	public String getTitle(){return "CS107_Project - Return of The DarkLord";}
 
 	@Override
 	public boolean begin(Window window, FileSystem fileSystem) {
