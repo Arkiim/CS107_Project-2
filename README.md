@@ -1,7 +1,12 @@
-<h1> EPFL - Computer Science BA1 | Java Project n°2 </h1>
-<h2> Zelda/Pokemon like grid-game </h2>
-	
-CONTROLS :
+# EPFL - CS-107 BA1 | Java OOP Project n°2
+## Zelda/Pokemon like grid-game 
+
+---
+
+###  MANUAL
+
+
+####   CONTROLS :
 
 	Play : 
 	    - arrows : move the player
@@ -22,12 +27,12 @@ CONTROLS :
 	    		
 ________________________________________________________________________________________________
 	
-PLAYER INFO :
+#### PLAYER INFO :
 
     - starts with only a sword in the inventory
     - max hp : 6.0f
-				
-WEAPON INFO :
+	 			
+#### WEAPON INFO :
 
 	- Arrow (thrown by bow) : 
         - attack type : PHYSICAL
@@ -49,7 +54,7 @@ WEAPON INFO :
 											   
 ________________________________________________________________________________________________
 
-MONSTER INFO :
+#### MONSTER INFO :
 
     - FlameSkull : 
             - hp : 2.0f
@@ -83,11 +88,11 @@ MONSTER INFO :
 				   
 ________________________________________________________________________________________________
 
-WALKTHROUGH :
+### WALKTHROUGH :
 
-		- you start in Village, you cannot move already
-		because the mayor comes to talk to you
-		- you can choose to help the mayor after he's finished talking (A : yes B : no)
+		- You start in Village, you cannot move already
+		because the mayor comes to talk to you.
+		- You can choose to help the mayor after he's finished talking (A : yes B : no)
 		- if you accept you win 400 gold
 		- if you don't the mayor becomes a zombie, (we do not recommand this option)
 		- then you need to go (up) to Ferme, enter the home that's near the zombie
