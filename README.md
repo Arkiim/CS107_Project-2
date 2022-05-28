@@ -5,6 +5,11 @@
 ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)  
 ---
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/David-Kyrat/CS107_Project-2/master/res/images/MP2-GameImg.png" width="350" title="In-Game Image 1" alt="In-Game Image 1">
+  <img src="https://raw.githubusercontent.com/David-Kyrat/CS107_Project-2/master/res/images/MP2-GameImg2.png" width="350" title="In-Game Image" alt="In-Game Image 2">
+</p>
+
 ### WALKTHROUGH :
 
 		- You start in Village, you cannot move already
