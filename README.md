@@ -5,6 +5,45 @@
 ![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)  
 ---
 
+### WALKTHROUGH :
+
+		- You start in Village, you cannot move already
+		because the mayor comes to talk to you.
+		- You can choose to help the mayor after he's finished talking (A : yes B : no)
+		- if you accept you win 400 gold
+		- if you don't the mayor becomes a zombie, (we do not recommand this option)
+		- then you need to go (up) to Ferme, enter the home that's near the zombie
+		- open the box in the house, collect the items it releases by walking on them
+		(1 bow, 45 arrows, 5 bombs)
+		- you should save the arrows as you'll need them later
+		- go up then right to Route
+		- you'll find there some monsters you're not forced to fight
+		- go down use the bow to throw an arrow at the orb
+		- that will make a bridge appear that will allow you to go across the river
+		- walk on the bridge
+		- continue right you'll reach RouteTemple
+		- enter the building you'll find there, you'll reach Temple
+		- go on the tile with the drawing (it is a teleporter
+		- press E to activate the lever to your right, you'll transported to
+		GrotteDonjon where you'll find 4 zombies you need to defeat
+		- defeating them will trigger a signal that will make a box appear
+		- open the box with E/Space bar
+		- the box drops the staff, collect it by walking on it
+		- go back next to lever, use it by pressing E, you'll be transported back to the temple
+		- go back to RouteTemple, then Route, go up, take the stone bridge
+		- you'll reach RouteChateau
+		- there you'll find DarkLord, 3 zombies
+		- use the staff to attack and defeat the DarkLord 
+		(staff is the only effective weapon against him)
+		- a key will be dropped where he standed when you defeated him
+		- walk on the key to collect it, it will allow to open the castle door
+		- open the castle door by pressing E, then you can step inside
+		- you'll reach the castle
+		- you just finished the game
+
+________________________________________________________________________________________________
+
+
 ###  MANUAL
 
 
@@ -88,43 +127,6 @@ ________________________________________________________________________________
             - as a grave it prevents some attacks at random depending on a fixed probability (0.2 chance to hurt it)
 	        - drops a heart after being defeated
 				   
-________________________________________________________________________________________________
-
-### WALKTHROUGH :
-
-		- You start in Village, you cannot move already
-		because the mayor comes to talk to you.
-		- You can choose to help the mayor after he's finished talking (A : yes B : no)
-		- if you accept you win 400 gold
-		- if you don't the mayor becomes a zombie, (we do not recommand this option)
-		- then you need to go (up) to Ferme, enter the home that's near the zombie
-		- open the box in the house, collect the items it releases by walking on them
-		(1 bow, 45 arrows, 5 bombs)
-		- you should save the arrows as you'll need them later
-		- go up then right to Route
-		- you'll find there some monsters you're not forced to fight
-		- go down use the bow to throw an arrow at the orb
-		- that will make a bridge appear that will allow you to go across the river
-		- walk on the bridge
-		- continue right you'll reach RouteTemple
-		- enter the building you'll find there, you'll reach Temple
-		- go on the tile with the drawing (it is a teleporter
-		- press E to activate the lever to your right, you'll transported to
-		GrotteDonjon where you'll find 4 zombies you need to defeat
-		- defeating them will trigger a signal that will make a box appear
-		- open the box with E/Space bar
-		- the box drops the staff, collect it by walking on it
-		- go back next to lever, use it by pressing E, you'll be transported back to the temple
-		- go back to RouteTemple, then Route, go up, take the stone bridge
-		- you'll reach RouteChateau
-		- there you'll find DarkLord, 3 zombies
-		- use the staff to attack and defeat the DarkLord 
-		(staff is the only effective weapon against him)
-		- a key will be dropped where he standed when you defeated him
-		- walk on the key to collect it, it will allow to open the castle door
-		- open the castle door by pressing E, then you can step inside
-		- you'll reach the castle
-		- you just finished the game
 		
 ________________________________________________________________________________________________
 		
